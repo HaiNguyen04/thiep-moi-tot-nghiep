@@ -14,9 +14,23 @@ const CONFIG = {
 };
 
 const qs = new URLSearchParams(window.location.search);
-const requestedGuest = (qs.get('guest') || '').trim().slice(0, 70);
+const SALUTATIONS = { ban: 'Bạn', anh: 'Anh', chi: 'Chị', em: 'Em', co: 'Cô', chu: 'Chú', 'gia-dinh': 'Gia đình', thay: 'Thầy' };
+function decodeCompactName(data) {
+  if (!data) return '';
+  try {
+    const bytes = Uint8Array.from(atob(data.replace(/-/g, '+').replace(/_/g, '/')), (character) => character.charCodeAt(0));
+    return new TextDecoder().decode(bytes);
+  } catch { return ''; }
+}
+function encodeCompactName(name) {
+  const bytes = new TextEncoder().encode(name);
+  return btoa(Array.from(bytes, (b) => String.fromCharCode(b)).join('')).replace(/\+/g, '-').replace(/\//g, '_').replace(/=+$/g, '');
+}
+const requestedGuest = (decodeCompactName(qs.get('g')) || qs.get('guest') || '').trim().slice(0, 70);
+const salutationCode = Object.hasOwn(SALUTATIONS, qs.get('x')) ? qs.get('x') : 'ban';
 const guestName = requestedGuest || 'Quý khách';
-document.getElementById('guest-name').textContent = guestName.toLocaleUpperCase('vi-VN');
+const guestAddress = requestedGuest ? `${SALUTATIONS[salutationCode]} ${guestName}` : guestName;
+document.getElementById('guest-name').textContent = guestAddress.toLocaleUpperCase('vi-VN');
 
 // Tên riêng của khách mời có thể tạo qua ?guest=...
 if (requestedGuest) {
@@ -82,18 +96,22 @@ meetingTab.addEventListener('click', () => showTab('meeting'));
 // SVG viewBox duoc giu co dinh 2048x974 de mui ten luon trung khop khi responsive.
 const mapCanvas = document.getElementById('campus-map');
 const routeButtons = Array.from(document.querySelectorAll('[data-route-choice]'));
-const routeDescription = document.getElementById('route-description');
-const routeDescriptions = {
-  both: '🔵 Cổng 1 (Lý Thường Kiệt) hoặc 🟠 Cổng 3 (Tô Hiến Thành) → tòa A5. Mũi tên đang chuyển động theo hướng đi.',
-  gate1: '🔵 Tuyến Cổng 1: vào từ đường Lý Thường Kiệt, đi qua khu vực gần sân banh rồi hướng tới tòa A5.',
-  gate3: '🟠 Tuyến Cổng 3: vào từ đường Tô Hiến Thành, đi theo lối giữa các dãy nhà và hướng tới tòa A5.',
-};
+const pathGate1 = document.getElementById('path-gate1');
+const pathGate3 = document.getElementById('path-gate3');
+function updateRoutesToPin(pin) {
+  mapCanvas.classList.toggle('no-pin', !pin);
+  if (!pin) return;
+  const x = Math.round(pin.x * 20.48);
+  const y = Math.round(pin.y * 9.74);
+  // Hai tuyến nối đến PIN người dùng chọn, không kết thúc ở ký hiệu A5.
+  pathGate1.setAttribute('d', `M386 420 C425 435 466 453 507 451 L594 448 Q635 443 684 441 Q765 442 ${x} ${y}`);
+  pathGate3.setAttribute('d', `M1820 575 L1761 557 Q1734 529 1725 482 Q1718 457 1643 459 L1479 457 L1352 458 L1212 460 Q1127 463 1057 452 Q917 467 ${x} ${y}`);
+}
 
 routeButtons.forEach((button) => {
   button.addEventListener('click', () => {
     const selected = button.dataset.routeChoice;
     mapCanvas.dataset.selected = selected;
-    routeDescription.textContent = routeDescriptions[selected];
     routeButtons.forEach((item) => {
       const active = item === button;
       item.classList.toggle('active', active);
@@ -108,10 +126,11 @@ if (!window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
   const routeArrows = [
     { path: document.getElementById('path-gate1'), arrow: document.querySelector('.route-gate1 .moving-arrow'), duration: 5400 },
     { path: document.getElementById('path-gate3'), arrow: document.querySelector('.route-gate3 .moving-arrow'), duration: 8000 },
-  ].map((item) => ({ ...item, length: item.path.getTotalLength() }));
+  ];
 
   const animateRouteArrows = (timestamp) => {
-    routeArrows.forEach(({ path, arrow, duration, length }) => {
+    routeArrows.forEach(({ path, arrow, duration }) => {
+      const length = path.getTotalLength();
       const distance = ((timestamp % duration) / duration) * length;
       const position = path.getPointAtLength(distance);
       const ahead = path.getPointAtLength(Math.min(length, distance + 2));
@@ -170,7 +189,11 @@ const pinPickButton = document.getElementById('pin-pick-button');
 const pinShareOutput = document.getElementById('pin-share-output');
 
 function readPinFromURL() {
-  const coordinates = (qs.get('pin') || '').split(',').map(Number);
+  const raw = qs.get('pin');
+  if (raw === 'off') return null;
+  // Điểm hẹn Hải đánh dấu trên ảnh tham khảo, có thể thay bằng chế độ ?builder=1.
+  if (!raw) return { x: 39.4, y: 58.8, label: 'Điểm hẹn chụp ảnh' };
+  const coordinates = raw.split(',').map(Number);
   if (coordinates.length !== 2 || coordinates.some((value) => !Number.isFinite(value) || value < 0 || value > 100)) return null;
   return {
     x: coordinates[0],
@@ -182,6 +205,7 @@ function readPinFromURL() {
 let meetingPin = readPinFromURL();
 function renderMeetingPin() {
   pinMarker.hidden = !meetingPin;
+  updateRoutesToPin(meetingPin);
   if (meetingPin) {
     pinMarker.style.left = `${meetingPin.x}%`;
     pinMarker.style.top = `${meetingPin.y}%`;
@@ -200,22 +224,53 @@ function syncPinURL() {
     url.searchParams.set('pin', `${meetingPin.x.toFixed(1)},${meetingPin.y.toFixed(1)}`);
     url.searchParams.set('spot', meetingPin.label);
   } else {
-    url.searchParams.delete('pin');
+    url.searchParams.set('pin', 'off');
     url.searchParams.delete('spot');
   }
   window.history.replaceState(null, '', url);
 }
 
-function createShareableURL(name) {
+function nameInitials(fullName) {
+  const spaced = fullName.replace(/([a-zà-ỹ])([A-ZÀ-Ỹ])/g, '$1 $2');
+  return spaced.trim().split(/[\s._-]+/).filter(Boolean).map((part) => part[0])
+    .join('').normalize('NFD').replace(/[\u0300-\u036f]/g, '').replace(/đ/gi, 'D')
+    .replace(/[^A-Za-z0-9]/g, '').toUpperCase().slice(0, 8) || 'KM';
+}
+
+function allocateGuestCode(name, salutation) {
+  const storageKey = 'hai-invite-shortcodes-v1';
+  const identity = `${salutation}|${name.normalize('NFC').toLocaleLowerCase('vi-VN')}`;
+  let registry = {};
+  try { registry = JSON.parse(localStorage.getItem(storageKey) || '{}'); } catch { /* chế độ riêng tư */ }
+  if (registry[identity]) return registry[identity];
+  const base = nameInitials(name);
+  const used = new Set(Object.values(registry));
+  let code = base;
+  let suffix = 2;
+  while (used.has(code)) code = `${base}${suffix++}`;
+  registry[identity] = code;
+  try { localStorage.setItem(storageKey, JSON.stringify(registry)); } catch { /* URL vẫn tự chứa tên */ }
+  return code;
+}
+
+function createShareableURL(name, salutation = salutationCode, code = null) {
   const url = new URL(window.location.href);
   url.searchParams.delete('builder');
-  if (name) url.searchParams.set('guest', name);
-  else url.searchParams.delete('guest');
+  url.searchParams.delete('guest');
+  if (name) {
+    url.searchParams.set('i', code || url.searchParams.get('i') || nameInitials(name));
+    url.searchParams.set('g', encodeCompactName(name));
+    url.searchParams.set('x', salutation);
+  } else {
+    url.searchParams.delete('i');
+    url.searchParams.delete('g');
+    url.searchParams.delete('x');
+  }
   if (meetingPin) {
     url.searchParams.set('pin', `${meetingPin.x.toFixed(1)},${meetingPin.y.toFixed(1)}`);
     url.searchParams.set('spot', meetingPin.label);
   } else {
-    url.searchParams.delete('pin');
+    url.searchParams.set('pin', 'off');
     url.searchParams.delete('spot');
   }
   return url;
@@ -276,13 +331,14 @@ if (qs.get('builder') === '1') {
   });
 }
 
-// Bản nhạc do Hải tải lên: chỉ phát sau thao tác của người xem.
+// Mặc định muốn phát nhạc: thử autoplay và bắt đầu ở tương tác đầu tiên nếu bị chặn.
 const music = document.getElementById('background-music');
 const musicToggle = document.getElementById('music-toggle');
 const musicText = document.getElementById('music-text');
 const musicSymbol = document.getElementById('music-symbol');
 const musicVolume = document.getElementById('music-volume');
 music.volume = Number(musicVolume.value) / 100;
+let musicWanted = true;
 function refreshMusicButton() {
   const isPlaying = !music.paused;
   musicToggle.setAttribute('aria-pressed', String(isPlaying));
@@ -292,9 +348,11 @@ function refreshMusicButton() {
 }
 musicToggle.addEventListener('click', async () => {
   if (!music.paused) {
+    musicWanted = false;
     music.pause();
     return;
   }
+  musicWanted = true;
   try { await music.play(); }
   catch { showToast('Không mở được nhạc lúc này. Hãy thử lại.'); }
   refreshMusicButton();
@@ -303,6 +361,19 @@ music.addEventListener('play', refreshMusicButton);
 music.addEventListener('pause', refreshMusicButton);
 musicVolume.addEventListener('input', () => { music.volume = Number(musicVolume.value) / 100; });
 refreshMusicButton();
+async function startDefaultMusic() {
+  if (!musicWanted || !music.paused) return;
+  try { await music.play(); } catch { /* Trình duyệt yêu cầu tương tác trước khi phát. */ }
+  refreshMusicButton();
+}
+function startMusicOnInteraction(event) {
+  // Nút nhạc có xử lý riêng, tránh vừa bật vừa tắt trong cùng lần click.
+  if (event.target instanceof Element && event.target.closest('.music-widget')) return;
+  startDefaultMusic();
+}
+document.addEventListener('pointerdown', startMusicOnInteraction, { capture: true });
+document.addEventListener('keydown', startMusicOnInteraction, { capture: true });
+startDefaultMusic();
 
 // Tải sự kiện iCalendar để dùng trong điện thoại / Google Calendar / Outlook.
 function downloadCalendarEvent() {
@@ -370,7 +441,7 @@ async function copyText(value) {
 document.getElementById('share-button').addEventListener('click', async () => {
   const shareData = {
     title: 'Thiệp mời tốt nghiệp của Hải',
-    text: `Thân mời ${guestName} đến dự lễ tốt nghiệp của Hải ngày 27.11.2026!`,
+    text: `Thân mời ${guestAddress} đến dự lễ tốt nghiệp của Hải ngày 27.11.2026!`,
     url: createShareableURL(requestedGuest).href,
   };
   if (navigator.share) {
@@ -389,15 +460,23 @@ if (qs.get('builder') === '1') {
   builder.hidden = false;
   const form = document.getElementById('guest-form');
   const input = document.getElementById('guest-input');
+  const salutationSelect = document.getElementById('guest-salutation');
+  const codePreview = document.getElementById('guest-short-code');
   const output = document.getElementById('builder-output');
   input.value = requestedGuest;
+  salutationSelect.value = salutationCode;
+
+  input.addEventListener('input', () => { codePreview.textContent = input.value.trim() ? nameInitials(input.value) : '—'; });
 
   form.addEventListener('submit', async (event) => {
     event.preventDefault();
     const name = input.value.trim();
     if (!name) return;
-    const url = createShareableURL(name);
+    const salutation = salutationSelect.value;
+    const code = allocateGuestCode(name, salutation);
+    const url = createShareableURL(name, salutation, code);
     const copied = await copyText(url.href);
+    codePreview.textContent = code;
     output.textContent = url.href;
     showToast(copied ? 'Đã tạo và sao chép link khách mời!' : 'Đã tạo link. Sao chép đường dẫn ở phía dưới.');
   });

@@ -59,7 +59,7 @@
 
             <div class="details-grid">
               <div class="detail"><span class="detail-label">MÃ CHUYẾN BAY</span><strong>BK-2026</strong></div>
-              <div class="detail"><span class="detail-label">THỜI GIAN</span><strong>THỨ SÁU - 27/11</strong></div>
+              <div class="detail"><span class="detail-label">NGÀY</span><strong>THỨ SÁU - 27/11</strong></div>
               <div class="detail"><span class="detail-label">HỘI TRƯỜNG</span><strong>A5</strong></div>
               <div class="detail detail-schedule"><span class="detail-label">TRƯỚC LỄ (CHỤP ẢNH)</span><strong>10:30 – 14:30</strong></div>
               <div class="detail detail-schedule detail-ceremony"><span class="detail-label">GIỜ LÀM LỄ</span><strong>15:00 – 16:30</strong></div>
@@ -87,7 +87,7 @@
               <div class="timer-numbers" id="countdown"><span>--</span><small>ngày</small><span>--</span><small>giờ</small><span>--</span><small>phút</small><span>--</span><small>giây</small></div>
             </div>
 
-            <div class="guest-strip"><span class="guest-pencil" aria-hidden="true">✎</span><span>THÂN MỜI</span><strong id="guest-name">QUÝ KHÁCH</strong></div>
+            <div class="guest-strip"><span class="guest-pencil" aria-hidden="true">✎</span><span>KÍNH MỜI</span><strong id="guest-name">QUÝ KHÁCH</strong></div>
 
             <div class="closing-note"><span class="gold-rule" aria-hidden="true"></span><p>“Điều đáng quý nhất của hành trình không chỉ là đích đến, mà còn là những người đã đồng hành cùng mình.”<br /><span class="closing-signoff"><strong>Hẹn gặp bạn tại lễ tốt nghiệp của Hải. 🎓📸</strong></span></p></div>
           </div>
@@ -97,7 +97,7 @@
             <div class="map-tabs" role="tablist" aria-label="Chọn thông tin chỉ đường"><button id="tab-map" class="map-tab active" type="button" role="tab" aria-selected="true" aria-controls="map-panel">Sơ đồ trường</button><button id="tab-meeting" class="map-tab" type="button" role="tab" aria-selected="false" aria-controls="meeting-panel">Điểm hẹn</button></div>
 
             <div id="map-panel" class="tab-panel" role="tabpanel" aria-labelledby="tab-map">
-              <div class="route-selector" role="group" aria-label="Chọn tuyến đường tới Hội trường A5">
+              <div class="route-selector" role="group" aria-label="Chọn tuyến đường tới điểm hẹn chụp ảnh">
                 <button class="route-option route-both active" type="button" data-route-choice="both" aria-pressed="true">Cả 2 tuyến</button>
                 <button class="route-option route-one-option" type="button" data-route-choice="gate1" aria-pressed="false"><span class="route-swatch gate-one-color"></span>Từ Cổng 1</button>
                 <button class="route-option route-three-option" type="button" data-route-choice="gate3" aria-pressed="false"><span class="route-swatch gate-three-color"></span>Từ Cổng 3</button>
@@ -111,7 +111,7 @@
                   </defs>
                   <!-- Routes are traced on the user-supplied raster map. Coordinates use its original 2048×974 viewBox. -->
                   <g class="route-track route-gate1">
-                    <path id="path-gate1" d="M386 420 C425 435 466 453 507 451 L594 448 Q635 443 684 441 L790 435 Q849 430 902 427" fill="none" />
+                    <path id="path-gate1" d="M386 420 C425 435 466 453 507 451 L594 448 Q635 443 684 441 Q759 442 807 573" fill="none" />
                     <use href="#path-gate1" class="route-halo" />
                     <use href="#path-gate1" class="route-stroke route-stroke-one" />
                     <use href="#path-gate1" class="route-dashes route-dashes-one" />
@@ -120,22 +120,25 @@
                     <g class="moving-arrow" filter="url(#route-shadow)"><path d="M-17 -12 L19 0 L-17 12 L-9 0 Z" fill="#1176d5" stroke="#fff" stroke-width="4" /></g>
                   </g>
                   <g class="route-track route-gate3">
-                    <path id="path-gate3" d="M1820 575 L1761 557 Q1734 529 1725 482 Q1718 457 1643 459 L1479 457 L1352 458 L1212 460 Q1127 463 1057 452 Q974 448 902 427" fill="none" />
+                    <path id="path-gate3" d="M1820 575 L1761 557 Q1734 529 1725 482 Q1718 457 1643 459 L1479 457 L1352 458 L1212 460 Q1127 463 1057 452 Q925 459 807 573" fill="none" />
                     <use href="#path-gate3" class="route-halo" />
                     <use href="#path-gate3" class="route-stroke route-stroke-three" />
                     <use href="#path-gate3" class="route-dashes route-dashes-three" />
                     <circle cx="1820" cy="575" r="19" class="gate-start gate-start-three" />
                     <circle cx="1820" cy="575" r="7" fill="#fff" />
-                    <g class="moving-arrow" filter="url(#route-shadow)"><path d="M-17 -12 L19 0 L-17 12 L-9 0 Z" fill="#e78d27" stroke="#fff" stroke-width="4" /></g>
+                    <g class="moving-arrow" filter="url(#route-shadow)"><path d="M-17 -12 L19 0 L-17 12 L-9 0 Z" fill="#20a75c" stroke="#fff" stroke-width="4" /></g>
                   </g>
-                  <g class="destination-marker" filter="url(#destination-glow)"><circle cx="902" cy="427" r="24" class="destination-pulse" /><circle cx="902" cy="427" r="16" fill="#cf2840" stroke="#fff" stroke-width="5" /><circle cx="902" cy="427" r="5" fill="#fff" /></g>
+                  <g class="building-a5" filter="url(#route-shadow)">
+                    <path d="M914 342 C892 342 878 357 878 377 C878 398 914 429 914 429 S950 398 950 377 C950 357 936 342 914 342Z" fill="#6747b5" stroke="#fff" stroke-width="5" />
+                    <text x="914" y="386" text-anchor="middle" fill="#fff" font-size="29" font-weight="900">A5</text>
+                  </g>
                   <!-- High-contrast Vietnamese street labels, placed over the original English map labels. -->
                   <g class="map-street-label" transform="translate(241 624) rotate(-61)">
                     <rect x="-220" y="-30" width="440" height="60" rx="14" fill="#0f3156" stroke="#ffcc66" stroke-width="5" />
                     <text x="0" y="12" text-anchor="middle" fill="#fff" font-size="32" font-weight="800">ĐƯỜNG LÝ THƯỜNG KIỆT</text>
                   </g>
                   <g class="map-street-label" transform="translate(1510 730) rotate(-10)">
-                    <rect x="-290" y="-31" width="580" height="62" rx="15" fill="#0f3156" stroke="#ffcc66" stroke-width="5" />
+                    <rect x="-290" y="-31" width="580" height="62" rx="15" fill="#11613e" stroke="#6dd79d" stroke-width="5" />
                     <text x="0" y="12" text-anchor="middle" fill="#fff" font-size="34" font-weight="800">ĐƯỜNG TÔ HIẾN THÀNH</text>
                   </g>
                   <!-- Labels for all three gates. Gate 2 is not a visitor entrance. -->
@@ -150,9 +153,22 @@
                     <text x="1067" y="740" text-anchor="middle" fill="#fff" font-size="29" font-weight="800">CỔNG 2 · GIÁO VIÊN</text>
                   </g>
                   <g class="map-gate-label map-gate-three">
-                    <path d="M1818 512 L1820 571" stroke="#fff" stroke-width="8" stroke-linecap="round" /><path d="M1818 512 L1820 571" stroke="#e78d27" stroke-width="5" stroke-linecap="round" />
-                    <rect x="1708" y="456" width="220" height="56" rx="13" fill="#a75d15" stroke="#fff" stroke-width="5" />
+                    <path d="M1818 512 L1820 571" stroke="#fff" stroke-width="8" stroke-linecap="round" /><path d="M1818 512 L1820 571" stroke="#20a75c" stroke-width="5" stroke-linecap="round" />
+                    <rect x="1708" y="456" width="220" height="56" rx="13" fill="#157849" stroke="#fff" stroke-width="5" />
                     <text x="1818" y="494" text-anchor="middle" fill="#fff" font-size="31" font-weight="800">CỔNG 3</text>
+                  </g>
+                  <g class="parking-map-label" aria-label="Bãi xe 1 gần Cổng 1">
+                    <circle cx="555" cy="353" r="31" fill="#0c548b" stroke="#fff" stroke-width="6" />
+                    <text x="555" y="368" text-anchor="middle" fill="#fff" font-size="43" font-weight="900">P</text>
+                    <rect x="478" y="389" width="154" height="35" rx="10" fill="#0c365e" stroke="#fff" stroke-width="3" />
+                    <text x="555" y="414" text-anchor="middle" fill="#fff" font-size="21" font-weight="800">BÃI XE 1</text>
+                  </g>
+                  <g class="parking-map-label" aria-label="Bãi xe 2 sau tòa B10">
+                    <circle cx="1494" cy="348" r="31" fill="#0c548b" stroke="#fff" stroke-width="6" />
+                    <text x="1494" y="363" text-anchor="middle" fill="#fff" font-size="43" font-weight="900">P</text>
+                    <rect x="1378" y="386" width="232" height="65" rx="11" fill="#0c365e" stroke="#fff" stroke-width="3" />
+                    <text x="1494" y="410" text-anchor="middle" fill="#fff" font-size="22" font-weight="800">BÃI XE 2</text>
+                    <text x="1494" y="437" text-anchor="middle" fill="#c4f5d6" font-size="20" font-weight="800">SAU TÒA B10</text>
                   </g>
                 </svg>
                 <div id="pin-layer" class="pin-layer" aria-label="Lớp đánh dấu điểm hẹn chụp ảnh">
@@ -162,15 +178,15 @@
                     <span id="pin-label" class="pin-label">ĐIỂM HẸN CHỤP ẢNH</span>
                   </div>
                 </div>
-                <div class="map-badge"><span class="badge-live"></span> ĐÍCH ĐẾN · A5</div>
+                <div class="map-badge"><span class="badge-live"></span> ĐÍCH ĐẾN · ĐIỂM HẸN</div>
                 <button id="map-zoom-button" class="map-zoom-button" type="button" aria-label="Phóng to bản đồ">⤢ <span>Phóng to</span></button>
                 <button id="map-close-button" class="map-close-button" type="button" aria-label="Đóng bản đồ phóng to" hidden>✕</button>
               </div>
               <div class="road-guide" aria-label="Hai đường vào trường">
                 <div class="road-guide-item"><span class="road-guide-mark road-guide-blue"></span><span><strong>ĐƯỜNG LÝ THƯỜNG KIỆT</strong><small>Vào Cổng 1</small></span></div>
-                <div class="road-guide-item"><span class="road-guide-mark road-guide-orange"></span><span><strong>ĐƯỜNG TÔ HIẾN THÀNH</strong><small>Vào Cổng 3</small></span></div>
+                <div class="road-guide-item"><span class="road-guide-mark road-guide-green"></span><span><strong>ĐƯỜNG TÔ HIẾN THÀNH</strong><small>Vào Cổng 3</small></span></div>
               </div>
-              <p class="route-description" id="route-description" aria-live="polite">🔵 Cổng 1 (Lý Thường Kiệt) hoặc 🟠 Cổng 3 (Tô Hiến Thành) → tòa A5. Mũi tên đang chuyển động theo hướng đi.</p>
+              <div class="parking-guide" aria-label="Vị trí hai bãi đỗ xe"><span><b>P</b> Bãi xe 1 · gần Cổng 1</span><span><b>P</b> Bãi xe 2 · sau tòa B10</span></div>
               <div id="pin-editor" class="pin-editor" hidden>
                 <div class="pin-editor-heading"><strong>📍 ĐẶT ĐIỂM HẸN CHỤP ẢNH</strong><span>Dành cho Hải khi tạo link mời</span></div>
                 <button id="pin-pick-button" class="pin-pick-button" type="button">Chấm PIN trực tiếp trên bản đồ</button>
@@ -180,6 +196,7 @@
                 <output id="pin-share-output" aria-live="polite"></output>
               </div>
               <div class="gate-warning" role="note"><span aria-hidden="true">⚠</span><p><strong>CỔNG 2 CHỈ DÀNH CHO GIÁO VIÊN.</strong><br />Khách mời vui lòng đi <strong>Cổng 1</strong> hoặc <strong>Cổng 3</strong> để vào trường.</p></div>
+              <p class="map-disclaimer">* Ảnh bản đồ gốc do Hải cung cấp. Tuyến đi vẽ trên ảnh nhằm gợi ý định hướng; vui lòng kiểm tra lối đi thực tế khi đến trường.</p>
             </div>
 
             <div id="meeting-panel" class="tab-panel meeting-panel" role="tabpanel" aria-labelledby="tab-meeting" hidden><div class="meeting-illustration"><div class="meeting-big-icon" aria-hidden="true">🎓</div><span class="meeting-sup">HẸN GẶP TẠI</span><h3>HỘI TRƯỜNG A5</h3><p>Trường Đại học Bách khoa · Cơ sở 1</p><div class="meeting-meta"><span>Thứ Sáu</span><strong>27.11.2026</strong><span>15:00 – 16:30</span></div><p class="meeting-photo-note">Chụp ảnh: 10:30–14:30 và 16:30–17:30</p></div></div>
@@ -204,11 +221,22 @@
 
       <footer class="site-footer"><p>LỜI MỜI TỪ HẢI · 2026</p></footer>
 
-      <section id="link-builder" class="link-builder" aria-labelledby="builder-title" hidden><div class="builder-copy"><span class="section-kicker">CÔNG CỤ CỦA HẢI</span><h2 id="builder-title">Tạo link thiệp mời cá nhân</h2><p>Nhập tên khách mời rồi sao chép đường dẫn để gửi cho từng người.</p></div><form id="guest-form"><label for="guest-input">Tên khách mời</label><div class="builder-controls"><input id="guest-input" name="guest" type="text" maxlength="70" placeholder="Ví dụ: My Na" autocomplete="name" required /><button type="submit">Tạo & sao chép link</button></div><output id="builder-output" aria-live="polite"></output></form></section>
+      <section id="link-builder" class="link-builder" aria-labelledby="builder-title" hidden>
+        <div class="builder-copy"><span class="section-kicker">CÔNG CỤ CỦA HẢI</span><h2 id="builder-title">Tạo link thiệp mời cá nhân</h2><p>Chọn cách xưng hô, nhập tên khách, sau đó tạo link có mã viết tắt. Link sẽ giữ nguyên vị trí PIN đã chọn.</p></div>
+        <form id="guest-form">
+          <div class="builder-fields">
+            <div><label for="guest-salutation">Xưng hô</label><select id="guest-salutation" name="salutation"><option value="ban">Bạn</option><option value="anh">Anh</option><option value="chi">Chị</option><option value="em">Em</option><option value="co">Cô</option><option value="chu">Chú</option><option value="gia-dinh">Gia đình</option><option value="thay">Thầy</option></select></div>
+            <div><label for="guest-input">Tên khách mời</label><input id="guest-input" name="guest" type="text" maxlength="70" placeholder="Ví dụ: Nguyễn Ngọc Hải" autocomplete="name" required /></div>
+          </div>
+          <div class="builder-controls"><button type="submit">Tạo &amp; sao chép link cá nhân</button></div>
+          <div class="builder-code">Mã khách mời: <strong id="guest-short-code">—</strong> <span>(tự thêm số nếu trùng mã)</span></div>
+          <output id="builder-output" aria-live="polite"></output>
+        </form>
+      </section>
     </main>
 
     <div class="music-widget" aria-label="Trình phát nhạc nền">
-      <audio id="background-music" src="assets/music.mp3" loop preload="none"></audio>
+      <audio id="background-music" src="assets/music.mp3" loop preload="auto" autoplay></audio>
       <button id="music-toggle" class="music-toggle" type="button" aria-pressed="false" aria-label="Bật nhạc nền"><span id="music-symbol" aria-hidden="true">♫</span><span id="music-text">Bật nhạc</span></button>
       <label class="music-volume" for="music-volume" aria-label="Âm lượng nhạc"><span aria-hidden="true">♪</span><input id="music-volume" type="range" min="0" max="100" value="35" /></label>
     </div>

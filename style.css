@@ -419,3 +419,50 @@ body{
 @keyframes pin-float{0%,100%{transform:translateY(0)}50%{transform:translateY(-5px)}}
 @media(max-width:500px){.music-widget{right:9px;bottom:10px;gap:6px;padding-right:9px}.music-toggle{padding:9px 11px}.music-volume input{width:53px}.pin-label{font-size:11px;max-width:165px;min-width:130px}.pin-editor-actions{grid-template-columns:1fr}.pin-editor-actions button{min-height:40px}}
 @media(prefers-reduced-motion:reduce){.pin-icon,.pin-pulse{animation:none}}
+
+/* Chỉ đường về PIN vàng, giao diện chỉ dẫn và bãi xe cập nhật. */
+.route-stroke-three{stroke:#1eac60}
+.gate-start-three{fill:#1eac60}
+.gate-three-color{background:#1eac60}
+.route-option.route-three-option.active{background:#137e48;border-color:#137e48}
+.road-guide-item:nth-child(2){background:#e2f7eb;border-color:#a5dec0;color:#156840}
+.road-guide-green{background:#1eac60}
+.map-with-routes.no-pin .route-track{display:none}
+.pin-label{font-size:11px;padding:6px 9px;min-width:0;max-width:175px;bottom:48px;border-width:1.5px;letter-spacing:0}
+.pin-icon svg{width:35px;height:43px}
+.parking-guide{display:flex;gap:10px;flex-wrap:wrap;margin:10px 0 0}
+.parking-guide span{display:inline-flex;align-items:center;gap:7px;flex:1;min-width:180px;border:1px solid #c8dfeb;background:#edf5fa;color:#214b6c;border-radius:9px;padding:9px 10px;font-size:12px;font-weight:700}
+.parking-guide b{display:inline-grid;place-items:center;background:#0b5688;color:#fff;width:22px;height:22px;border-radius:6px;font-size:15px}
+.parking-map-label text,.building-a5 text{font-family:'Be Vietnam Pro',Arial,sans-serif;paint-order:stroke}
+
+/* Tạo link riêng: xưng hô + mã viết tắt, tên người nhận vẫn giải mã được. */
+.builder-fields{display:grid;grid-template-columns:minmax(120px,160px) minmax(0,1fr);gap:10px}
+.builder-fields>div{min-width:0}
+.builder-fields label{font-size:12px;margin-bottom:7px}
+.builder-fields input,.builder-fields select{width:100%;min-height:45px;border:1px solid #c2d4e7;border-radius:9px;padding:10px 12px;background:#fff;color:#15365b;font:inherit;font-size:14px}
+.builder-fields select{appearance:none;background-image:linear-gradient(45deg,transparent 50%,#557795 50%),linear-gradient(135deg,#557795 50%,transparent 50%);background-position:calc(100% - 17px) 20px,calc(100% - 12px) 20px;background-size:5px 5px;background-repeat:no-repeat;padding-right:29px}
+.builder-controls{margin-top:10px}
+.builder-controls button{width:100%;min-height:45px;background:#115b99;border-radius:9px;font-size:13px}
+.builder-code{margin-top:11px;display:flex;gap:7px;align-items:center;flex-wrap:wrap;color:#526c86;font-size:12px;font-weight:700}
+.builder-code strong{background:#e7f2ff;border:1px solid #bed6f2;color:#16446f;border-radius:7px;padding:5px 9px;letter-spacing:.06em;font-size:14px}
+.builder-code span{font-size:11px;font-weight:500;color:#6d7e90}
+
+@media(max-width:600px){
+  .app-shell{padding:12px 8px 16px}
+  .ticket-left,.ticket-right{padding:21px 15px}
+  .map-tabs .map-tab{min-height:44px;font-size:13px}
+  .route-selector{gap:6px}
+  .route-option{min-height:45px;font-size:11px}
+  .map-zoom-button{min-height:36px;padding:8px 11px;font-size:11px}
+  .map-zoom-button span{display:inline}
+  .parking-guide{flex-direction:column;gap:7px}
+  .parking-guide span{flex:auto;min-width:0}
+  .pin-label{font-size:10px;max-width:130px;bottom:44px;padding:5px 7px}
+  .builder-fields{grid-template-columns:1fr}
+  .builder-fields input,.builder-fields select{min-height:46px;font-size:16px}
+  .builder-code{align-items:flex-start}
+  .action-grid{grid-template-columns:1fr}
+  .wide-action{grid-column:1}
+  .action-button{min-height:46px;font-size:12px}
+  .map-with-routes.expanded{width:98vw;border-width:3px;padding:3px;border-radius:11px}
+}
