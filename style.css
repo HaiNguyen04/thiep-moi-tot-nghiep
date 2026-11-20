@@ -384,3 +384,38 @@ body{
   .photo-meeting{padding:12px 13px}
   .photo-meeting p{font-size:12px;margin-left:0}
 }
+
+/* PIN điểm hẹn gắn với tọa độ trên chính ảnh bản đồ gốc */
+.pin-layer{position:absolute;inset:7px;z-index:2;pointer-events:none}
+.pin-layer.editing{pointer-events:auto;cursor:crosshair;background:#d4a04816;box-shadow:inset 0 0 0 3px #d4a04880;border-radius:7px}
+.pin-layer.editing:after{content:'CHẠM VÀO VỊ TRÍ HẸN';position:absolute;left:50%;bottom:18px;transform:translateX(-50%);background:#0e315e;color:white;padding:10px 14px;border:1px solid #f0c879;border-radius:100px;font-size:12px;font-weight:800;white-space:nowrap;box-shadow:0 5px 16px #001d4180;pointer-events:none}
+.meeting-pin{position:absolute;transform:translate(-50%,-100%);width:48px;height:48px;text-align:center;filter:drop-shadow(0 4px 7px #1b294e80);z-index:3}
+.pin-icon{font-size:39px;line-height:48px;display:block;position:relative;z-index:2;animation:pin-float 2.8s ease-in-out infinite}
+.pin-icon svg{display:block;width:40px;height:48px;margin:auto}
+.pin-pulse{position:absolute;left:50%;bottom:3px;width:22px;height:10px;border-radius:50%;background:#ffd26a90;transform:translateX(-50%);box-shadow:0 0 0 5px #f6ba3845;animation:pin-pulse 2.3s ease-out infinite}
+.pin-label{position:absolute;bottom:51px;left:50%;transform:translateX(-50%);min-width:max-content;max-width:250px;padding:8px 12px;border:2px solid #fff1c3;background:#092c58;color:#fff;border-radius:10px;font-size:13px;line-height:1.3;font-weight:800;white-space:normal;box-shadow:0 5px 13px #00193450}
+.pin-editor{background:#fff8ea;border:1px solid #e8c78b;border-radius:13px;padding:15px;margin-top:13px;color:#17345c}
+.pin-editor-heading{display:flex;flex-wrap:wrap;gap:4px 12px;justify-content:space-between;align-items:center;margin-bottom:12px}
+.pin-editor-heading strong{font-size:13px;color:#103e6f}
+.pin-editor-heading span{font-size:11px;color:#876d42}
+.pin-pick-button{width:100%;border:1px dashed #ad8d4b;border-radius:9px;padding:12px 11px;font-weight:800;color:#173c63;background:#fff;transition:background .2s}
+.pin-pick-button:hover,.pin-pick-button[aria-pressed="true"]{background:#e8f1ff}
+.pin-editor label{display:block;margin:13px 0 6px;font-size:12px;font-weight:800;color:#435674}
+.pin-editor input{width:100%;border:1px solid #d9c9a9;background:#fff;border-radius:9px;padding:12px 11px;color:#102e50;font-size:14px}
+.pin-editor-actions{display:grid;grid-template-columns:1fr auto;gap:8px;margin-top:10px}
+.pin-editor-actions button{border:0;border-radius:9px;padding:11px 13px;font-size:12px;font-weight:800}
+#pin-save-button{background:#0b578f;color:#fff}
+#pin-save-button:hover{background:#083d6d}
+#pin-clear-button{background:#f3e6d0;color:#765a31}
+#pin-share-output{display:block;margin-top:10px;overflow-wrap:anywhere;font-size:11px;line-height:1.5;color:#20517f}
+/* Nhạc nền: người xem chủ động bật, không phát có tiếng khi chưa tương tác. */
+.music-widget{position:fixed;right:18px;bottom:18px;z-index:110;display:flex;align-items:center;gap:12px;border:1px solid #d5ad6785;border-radius:100px;background:#0a284de9;backdrop-filter:blur(12px);box-shadow:0 9px 27px #00142c66;padding:6px 15px 6px 6px;color:#fff}
+.music-toggle{display:flex;align-items:center;gap:8px;border:0;border-radius:100px;background:#f7edd7;color:#123c66;font-weight:800;font-size:12px;padding:9px 14px;white-space:nowrap}
+.music-toggle[aria-pressed="true"]{background:#d4a64c;color:#061d3a}
+#music-symbol{font-size:18px;line-height:1}
+.music-volume{display:flex;align-items:center;gap:7px;color:#f7da9d;font-size:18px}
+.music-volume input{width:78px;accent-color:#d5a94f;cursor:pointer}
+@keyframes pin-pulse{0%{transform:translateX(-50%) scale(.75);opacity:.9}100%{transform:translateX(-50%) scale(1.9);opacity:.25}}
+@keyframes pin-float{0%,100%{transform:translateY(0)}50%{transform:translateY(-5px)}}
+@media(max-width:500px){.music-widget{right:9px;bottom:10px;gap:6px;padding-right:9px}.music-toggle{padding:9px 11px}.music-volume input{width:53px}.pin-label{font-size:11px;max-width:165px;min-width:130px}.pin-editor-actions{grid-template-columns:1fr}.pin-editor-actions button{min-height:40px}}
+@media(prefers-reduced-motion:reduce){.pin-icon,.pin-pulse{animation:none}}

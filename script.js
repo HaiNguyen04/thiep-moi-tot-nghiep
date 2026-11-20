@@ -157,6 +157,153 @@ meetingTab.addEventListener('click', () => {
   if (mapCanvas.classList.contains('expanded')) setMapExpanded(false);
 });
 
+// PIN điểm hẹn được lưu trong URL để ai nhận link đều thấy cùng vị trí.
+// Ví dụ: ?guest=My%20Na&pin=45.3,46.2&spot=Goc%20san%20banh
+const pinLayer = document.getElementById('pin-layer');
+const pinMarker = document.getElementById('meeting-pin');
+const pinLabel = document.getElementById('pin-label');
+const photoMeetingText = document.getElementById('photo-meeting-text');
+const defaultPhotoMeetingHTML = photoMeetingText.innerHTML;
+const pinNameInput = document.getElementById('pin-name-input');
+const pinEditor = document.getElementById('pin-editor');
+const pinPickButton = document.getElementById('pin-pick-button');
+const pinShareOutput = document.getElementById('pin-share-output');
+
+function readPinFromURL() {
+  const coordinates = (qs.get('pin') || '').split(',').map(Number);
+  if (coordinates.length !== 2 || coordinates.some((value) => !Number.isFinite(value) || value < 0 || value > 100)) return null;
+  return {
+    x: coordinates[0],
+    y: coordinates[1],
+    label: (qs.get('spot') || 'Điểm hẹn chụp ảnh').trim().slice(0, 70) || 'Điểm hẹn chụp ảnh',
+  };
+}
+
+let meetingPin = readPinFromURL();
+function renderMeetingPin() {
+  pinMarker.hidden = !meetingPin;
+  if (meetingPin) {
+    pinMarker.style.left = `${meetingPin.x}%`;
+    pinMarker.style.top = `${meetingPin.y}%`;
+    pinLabel.textContent = meetingPin.label;
+    pinMarker.setAttribute('aria-label', `Điểm hẹn chụp ảnh: ${meetingPin.label}`);
+    photoMeetingText.textContent = `📍 Điểm hẹn: ${meetingPin.label}. Xem PIN vàng trên bản đồ để tìm đúng vị trí.`;
+  } else {
+    photoMeetingText.innerHTML = defaultPhotoMeetingHTML;
+  }
+}
+renderMeetingPin();
+
+function syncPinURL() {
+  const url = new URL(window.location.href);
+  if (meetingPin) {
+    url.searchParams.set('pin', `${meetingPin.x.toFixed(1)},${meetingPin.y.toFixed(1)}`);
+    url.searchParams.set('spot', meetingPin.label);
+  } else {
+    url.searchParams.delete('pin');
+    url.searchParams.delete('spot');
+  }
+  window.history.replaceState(null, '', url);
+}
+
+function createShareableURL(name) {
+  const url = new URL(window.location.href);
+  url.searchParams.delete('builder');
+  if (name) url.searchParams.set('guest', name);
+  else url.searchParams.delete('guest');
+  if (meetingPin) {
+    url.searchParams.set('pin', `${meetingPin.x.toFixed(1)},${meetingPin.y.toFixed(1)}`);
+    url.searchParams.set('spot', meetingPin.label);
+  } else {
+    url.searchParams.delete('pin');
+    url.searchParams.delete('spot');
+  }
+  return url;
+}
+
+if (qs.get('builder') === '1') {
+  pinEditor.hidden = false;
+  pinNameInput.value = meetingPin?.label || '';
+  pinPickButton.setAttribute('aria-pressed', 'false');
+
+  pinPickButton.addEventListener('click', () => {
+    showTab('map');
+    pinLayer.classList.add('editing');
+    pinPickButton.setAttribute('aria-pressed', 'true');
+    setMapExpanded(true);
+    showToast('Chạm vào vị trí muốn hẹn trên bản đồ phóng to.');
+  });
+
+  pinLayer.addEventListener('click', (event) => {
+    if (!pinLayer.classList.contains('editing')) return;
+    const rect = pinLayer.getBoundingClientRect();
+    const clamp = (n) => Math.max(0, Math.min(100, n));
+    const x = clamp(((event.clientX - rect.left) / rect.width) * 100);
+    const y = clamp(((event.clientY - rect.top) / rect.height) * 100);
+    meetingPin = {
+      x: Math.round(x * 10) / 10,
+      y: Math.round(y * 10) / 10,
+      label: pinNameInput.value.trim().slice(0, 70) || 'Điểm hẹn chụp ảnh',
+    };
+    renderMeetingPin();
+    pinLayer.classList.remove('editing');
+    pinPickButton.setAttribute('aria-pressed', 'false');
+    setMapExpanded(false);
+    pinNameInput.focus();
+    showToast('Đã chấm PIN. Nhập tên điểm hẹn rồi lưu link nhé!');
+  });
+
+  document.getElementById('pin-save-button').addEventListener('click', async () => {
+    if (!meetingPin) return showToast('Hãy chấm một vị trí PIN trên bản đồ trước.');
+    meetingPin.label = pinNameInput.value.trim().slice(0, 70) || 'Điểm hẹn chụp ảnh';
+    renderMeetingPin();
+    syncPinURL();
+    const url = createShareableURL(requestedGuest).href;
+    const copied = await copyText(url);
+    pinShareOutput.textContent = url;
+    showToast(copied ? 'Đã lưu PIN và sao chép link!' : 'Đã lưu PIN. Sao chép link ngay bên dưới.');
+  });
+
+  document.getElementById('pin-clear-button').addEventListener('click', () => {
+    meetingPin = null;
+    renderMeetingPin();
+    pinLayer.classList.remove('editing');
+    pinPickButton.setAttribute('aria-pressed', 'false');
+    pinNameInput.value = '';
+    syncPinURL();
+    pinShareOutput.textContent = 'Đã xóa PIN khỏi đường dẫn hiện tại.';
+    showToast('Đã xóa điểm hẹn.');
+  });
+}
+
+// Bản nhạc do Hải tải lên: chỉ phát sau thao tác của người xem.
+const music = document.getElementById('background-music');
+const musicToggle = document.getElementById('music-toggle');
+const musicText = document.getElementById('music-text');
+const musicSymbol = document.getElementById('music-symbol');
+const musicVolume = document.getElementById('music-volume');
+music.volume = Number(musicVolume.value) / 100;
+function refreshMusicButton() {
+  const isPlaying = !music.paused;
+  musicToggle.setAttribute('aria-pressed', String(isPlaying));
+  musicToggle.setAttribute('aria-label', isPlaying ? 'Tắt nhạc nền' : 'Bật nhạc nền');
+  musicText.textContent = isPlaying ? 'Tắt nhạc' : 'Bật nhạc';
+  musicSymbol.textContent = isPlaying ? '♫' : '♪';
+}
+musicToggle.addEventListener('click', async () => {
+  if (!music.paused) {
+    music.pause();
+    return;
+  }
+  try { await music.play(); }
+  catch { showToast('Không mở được nhạc lúc này. Hãy thử lại.'); }
+  refreshMusicButton();
+});
+music.addEventListener('play', refreshMusicButton);
+music.addEventListener('pause', refreshMusicButton);
+musicVolume.addEventListener('input', () => { music.volume = Number(musicVolume.value) / 100; });
+refreshMusicButton();
+
 // Tải sự kiện iCalendar để dùng trong điện thoại / Google Calendar / Outlook.
 function downloadCalendarEvent() {
   const pad = (n) => String(n).padStart(2, '0');
@@ -224,7 +371,7 @@ document.getElementById('share-button').addEventListener('click', async () => {
   const shareData = {
     title: 'Thiệp mời tốt nghiệp của Hải',
     text: `Thân mời ${guestName} đến dự lễ tốt nghiệp của Hải ngày 27.11.2026!`,
-    url: window.location.href,
+    url: createShareableURL(requestedGuest).href,
   };
   if (navigator.share) {
     try { await navigator.share(shareData); return; } catch (error) {
@@ -249,9 +396,7 @@ if (qs.get('builder') === '1') {
     event.preventDefault();
     const name = input.value.trim();
     if (!name) return;
-    const url = new URL(window.location.href);
-    url.search = '';
-    url.searchParams.set('guest', name);
+    const url = createShareableURL(name);
     const copied = await copyText(url.href);
     output.textContent = url.href;
     showToast(copied ? 'Đã tạo và sao chép link khách mời!' : 'Đã tạo link. Sao chép đường dẫn ở phía dưới.');

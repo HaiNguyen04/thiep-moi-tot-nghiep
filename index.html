@@ -74,7 +74,7 @@
 
             <div class="photo-meeting">
               <div class="photo-meeting-title"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="5" width="18" height="15" rx="2"/><circle cx="12" cy="12.5" r="3.2"/><path d="M7.5 5 9 3h6l1.5 2"/></svg><span>ĐIỂM HẸN CHỤP ẢNH</span></div>
-              <p>Liên hệ Hải qua <a href="tel:0948637877">0948 637 877</a> để xác nhận vị trí hẹn.</p>
+              <p id="photo-meeting-text">Liên hệ Hải qua <a href="tel:0948637877">0948 637 877</a> để xác nhận vị trí hẹn.</p>
             </div>
 
             <div class="message-card">
@@ -155,6 +155,13 @@
                     <text x="1818" y="494" text-anchor="middle" fill="#fff" font-size="31" font-weight="800">CỔNG 3</text>
                   </g>
                 </svg>
+                <div id="pin-layer" class="pin-layer" aria-label="Lớp đánh dấu điểm hẹn chụp ảnh">
+                  <div id="meeting-pin" class="meeting-pin" role="img" aria-label="Điểm hẹn chụp ảnh" hidden>
+                    <span class="pin-pulse" aria-hidden="true"></span>
+                    <span class="pin-icon" aria-hidden="true"><svg viewBox="0 0 40 52" xmlns="http://www.w3.org/2000/svg"><path d="M20 2C10 2 3 9 3 19c0 13 17 31 17 31s17-18 17-31C37 9 30 2 20 2Z" fill="#d5a444" stroke="#fff" stroke-width="3"/><circle cx="20" cy="19" r="7" fill="#fff"/></svg></span>
+                    <span id="pin-label" class="pin-label">ĐIỂM HẸN CHỤP ẢNH</span>
+                  </div>
+                </div>
                 <div class="map-badge"><span class="badge-live"></span> ĐÍCH ĐẾN · A5</div>
                 <button id="map-zoom-button" class="map-zoom-button" type="button" aria-label="Phóng to bản đồ">⤢ <span>Phóng to</span></button>
                 <button id="map-close-button" class="map-close-button" type="button" aria-label="Đóng bản đồ phóng to" hidden>✕</button>
@@ -164,6 +171,14 @@
                 <div class="road-guide-item"><span class="road-guide-mark road-guide-orange"></span><span><strong>ĐƯỜNG TÔ HIẾN THÀNH</strong><small>Vào Cổng 3</small></span></div>
               </div>
               <p class="route-description" id="route-description" aria-live="polite">🔵 Cổng 1 (Lý Thường Kiệt) hoặc 🟠 Cổng 3 (Tô Hiến Thành) → tòa A5. Mũi tên đang chuyển động theo hướng đi.</p>
+              <div id="pin-editor" class="pin-editor" hidden>
+                <div class="pin-editor-heading"><strong>📍 ĐẶT ĐIỂM HẸN CHỤP ẢNH</strong><span>Dành cho Hải khi tạo link mời</span></div>
+                <button id="pin-pick-button" class="pin-pick-button" type="button">Chấm PIN trực tiếp trên bản đồ</button>
+                <label for="pin-name-input">Tên điểm hẹn</label>
+                <input id="pin-name-input" type="text" maxlength="70" placeholder="Ví dụ: Góc bên phải sân banh" />
+                <div class="pin-editor-actions"><button id="pin-save-button" type="button">Lưu &amp; sao chép link có PIN</button><button id="pin-clear-button" type="button">Xóa PIN</button></div>
+                <output id="pin-share-output" aria-live="polite"></output>
+              </div>
               <div class="gate-warning" role="note"><span aria-hidden="true">⚠</span><p><strong>CỔNG 2 CHỈ DÀNH CHO GIÁO VIÊN.</strong><br />Khách mời vui lòng đi <strong>Cổng 1</strong> hoặc <strong>Cổng 3</strong> để vào trường.</p></div>
               <p class="map-disclaimer">* Ảnh bản đồ gốc do Hải cung cấp. Tuyến đi vẽ trên ảnh nhằm gợi ý định hướng; vui lòng kiểm tra lối đi thực tế khi đến trường.</p>
             </div>
@@ -193,6 +208,11 @@
       <section id="link-builder" class="link-builder" aria-labelledby="builder-title" hidden><div class="builder-copy"><span class="section-kicker">CÔNG CỤ CỦA HẢI</span><h2 id="builder-title">Tạo link thiệp mời cá nhân</h2><p>Nhập tên khách mời rồi sao chép đường dẫn để gửi cho từng người.</p></div><form id="guest-form"><label for="guest-input">Tên khách mời</label><div class="builder-controls"><input id="guest-input" name="guest" type="text" maxlength="70" placeholder="Ví dụ: My Na" autocomplete="name" required /><button type="submit">Tạo & sao chép link</button></div><output id="builder-output" aria-live="polite"></output></form></section>
     </main>
 
+    <div class="music-widget" aria-label="Trình phát nhạc nền">
+      <audio id="background-music" src="assets/music.mp3" loop preload="none"></audio>
+      <button id="music-toggle" class="music-toggle" type="button" aria-pressed="false" aria-label="Bật nhạc nền"><span id="music-symbol" aria-hidden="true">♫</span><span id="music-text">Bật nhạc</span></button>
+      <label class="music-volume" for="music-volume" aria-label="Âm lượng nhạc"><span aria-hidden="true">♪</span><input id="music-volume" type="range" min="0" max="100" value="35" /></label>
+    </div>
     <div id="map-backdrop" class="map-backdrop" hidden></div>
     <div id="toast" class="toast" role="status" aria-live="polite"></div>
   </body>
