@@ -14,7 +14,10 @@ const CONFIG = {
 };
 
 const qs = new URLSearchParams(window.location.search);
+const INVITE_API_BASE = 'https://hai-graduation-shortlinks-2026.breezyteal1027.chatgpt.site';
+const serverCode = /^[A-Z0-9]{1,14}$/.test(qs.get('k') || '') ? qs.get('k') : '';
 const SALUTATIONS = { ban: 'Bạn', anh: 'Anh', chi: 'Chị', em: 'Em', co: 'Cô', chu: 'Chú', 'gia-dinh': 'Gia đình', thay: 'Thầy' };
+const SHORT_SALUTATIONS = { b: 'ban', a: 'anh', c: 'chi', e: 'em', o: 'co', u: 'chu', g: 'gia-dinh', t: 'thay' };
 function decodeCompactName(data) {
   if (!data) return '';
   try {
@@ -26,16 +29,30 @@ function encodeCompactName(name) {
   const bytes = new TextEncoder().encode(name);
   return btoa(Array.from(bytes, (b) => String.fromCharCode(b)).join('')).replace(/\+/g, '-').replace(/\//g, '_').replace(/=+$/g, '');
 }
-const requestedGuest = (decodeCompactName(qs.get('g')) || qs.get('guest') || '').trim().slice(0, 70);
-const salutationCode = Object.hasOwn(SALUTATIONS, qs.get('x')) ? qs.get('x') : 'ban';
-const guestName = requestedGuest || 'Quý khách';
-const guestAddress = requestedGuest ? `${SALUTATIONS[salutationCode]} ${guestName}` : guestName;
-document.getElementById('guest-name').textContent = guestAddress.toLocaleUpperCase('vi-VN');
+// Link một tham số: ?m=MTU.e.TWluaCBUaMawxqFuZw
+// Giữ mã viết tắt, xưng hô và tên đầy đủ ngay trong URL, không cần máy chủ.
+function readShortInvite() {
+  const match = /^([A-Z0-9]{1,14})\.([baceougt])\.([A-Za-z0-9_-]+)$/.exec(qs.get('m') || '');
+  if (!match) return null;
+  const name = decodeCompactName(match[3]).trim().slice(0, 70);
+  return name ? { code: match[1], salutation: SHORT_SALUTATIONS[match[2]], name } : null;
+}
+const shortInvite = readShortInvite();
+let requestedGuest = (shortInvite?.name || decodeCompactName(qs.get('g')) || qs.get('guest') || '').trim().slice(0, 70);
+let salutationCode = shortInvite?.salutation || (Object.hasOwn(SALUTATIONS, qs.get('x')) ? qs.get('x') : 'ban');
+let guestName = requestedGuest || 'Quý khách';
+let guestAddress = requestedGuest ? `${SALUTATIONS[salutationCode]} ${guestName}` : guestName;
+function renderGuest() {
+  guestName = requestedGuest || 'Quý khách';
+  guestAddress = requestedGuest ? `${SALUTATIONS[salutationCode]} ${guestName}` : guestName;
+  document.getElementById('guest-name').textContent = serverCode && !requestedGuest
+    ? 'ĐANG TẢI THIỆP MỜI…' : guestAddress.toLocaleUpperCase('vi-VN');
+  if (requestedGuest) document.title = `Thiệp mời ${requestedGuest} · Tốt nghiệp Nguyễn Ngọc Hải`;
+}
+renderGuest();
 
 // Tên riêng của khách mời có thể tạo qua ?guest=...
-if (requestedGuest) {
-  document.title = `Thiệp mời ${requestedGuest} · Tốt nghiệp Nguyễn Ngọc Hải`;
-}
+// ?k=LMT sẽ truy vấn tên/xưng hô/PIN đã lưu trên máy chủ.
 
 const countdownElement = document.getElementById('countdown');
 const departureAt = new Date(CONFIG.eventDate).getTime();
@@ -182,23 +199,38 @@ const pinLayer = document.getElementById('pin-layer');
 const pinMarker = document.getElementById('meeting-pin');
 const pinLabel = document.getElementById('pin-label');
 const photoMeetingText = document.getElementById('photo-meeting-text');
-const defaultPhotoMeetingHTML = photoMeetingText.innerHTML;
+const defaultPhotoMeetingHTML = photoMeetingText?.innerHTML || '';
 const pinNameInput = document.getElementById('pin-name-input');
 const pinEditor = document.getElementById('pin-editor');
 const pinPickButton = document.getElementById('pin-pick-button');
 const pinShareOutput = document.getElementById('pin-share-output');
 
+const DEFAULT_PIN = { x: 39.4, y: 58.8, label: 'Điểm hẹn' };
+function normalizeMeetingLabel(label) {
+  const name = String(label || '').trim().slice(0, 70);
+  return !name || name.toLocaleLowerCase('vi-VN') === 'điểm hẹn chụp ảnh' ? 'Điểm hẹn' : name;
+}
 function readPinFromURL() {
+  const short = qs.get('p');
+  if (short === 'off') return null;
+  if (short) {
+    const match = /^([0-9a-z]+)\.([0-9a-z]+)$/.exec(short);
+    if (!match) return null;
+    const x = Number.parseInt(match[1], 36) / 10;
+    const y = Number.parseInt(match[2], 36) / 10;
+    if (![x, y].every((value) => Number.isFinite(value) && value >= 0 && value <= 100)) return null;
+    return { x, y, label: normalizeMeetingLabel(decodeCompactName(qs.get('s'))) };
+  }
   const raw = qs.get('pin');
   if (raw === 'off') return null;
   // Điểm hẹn Hải đánh dấu trên ảnh tham khảo, có thể thay bằng chế độ ?builder=1.
-  if (!raw) return { x: 39.4, y: 58.8, label: 'Điểm hẹn chụp ảnh' };
+  if (!raw) return { ...DEFAULT_PIN };
   const coordinates = raw.split(',').map(Number);
   if (coordinates.length !== 2 || coordinates.some((value) => !Number.isFinite(value) || value < 0 || value > 100)) return null;
   return {
     x: coordinates[0],
     y: coordinates[1],
-    label: (qs.get('spot') || 'Điểm hẹn chụp ảnh').trim().slice(0, 70) || 'Điểm hẹn chụp ảnh',
+    label: normalizeMeetingLabel(qs.get('spot')),
   };
 }
 
@@ -210,23 +242,55 @@ function renderMeetingPin() {
     pinMarker.style.left = `${meetingPin.x}%`;
     pinMarker.style.top = `${meetingPin.y}%`;
     pinLabel.textContent = meetingPin.label;
-    pinMarker.setAttribute('aria-label', `Điểm hẹn chụp ảnh: ${meetingPin.label}`);
-    photoMeetingText.textContent = `📍 Điểm hẹn: ${meetingPin.label}. Xem PIN vàng trên bản đồ để tìm đúng vị trí.`;
-  } else {
+    pinMarker.setAttribute('aria-label', meetingPin.label === DEFAULT_PIN.label ? 'Điểm hẹn' : `Điểm hẹn: ${meetingPin.label}`);
+    if (photoMeetingText) photoMeetingText.textContent = meetingPin.label === DEFAULT_PIN.label
+      ? '📍 Xem PIN vàng trên bản đồ để đến điểm hẹn của Hải.'
+      : `📍 Điểm hẹn: ${meetingPin.label}. Xem PIN vàng trên bản đồ để tìm đúng vị trí.`;
+  } else if (photoMeetingText) {
     photoMeetingText.innerHTML = defaultPhotoMeetingHTML;
   }
 }
 renderMeetingPin();
 
+async function resolveServerInvite() {
+  if (!serverCode) return;
+  try {
+    const response = await fetch(`${INVITE_API_BASE}/api/invites/${serverCode}`, { cache: 'no-store' });
+    if (!response.ok) throw new Error('Không tìm thấy mã khách mời.');
+    const invite = await response.json();
+    if (typeof invite.name !== 'string' || !Object.hasOwn(SALUTATIONS, invite.salutation)) throw new Error('Dữ liệu thiệp không hợp lệ.');
+    requestedGuest = invite.name.trim().slice(0, 70);
+    salutationCode = invite.salutation;
+    renderGuest();
+    if (!qs.has('p') && !qs.has('pin')) {
+      const pin = invite.pin;
+      meetingPin = pin && Number.isFinite(pin.x) && Number.isFinite(pin.y) && pin.x >= 0 && pin.x <= 100 && pin.y >= 0 && pin.y <= 100
+        ? { x: pin.x, y: pin.y, label: normalizeMeetingLabel(pin.label) } : null;
+      renderMeetingPin();
+    }
+  } catch {
+    document.getElementById('guest-name').textContent = 'KHÔNG TẢI ĐƯỢC THIỆP MỜI';
+    showToast('Không tra cứu được mã khách mời. Vui lòng nhờ Hải kiểm tra link.');
+  }
+}
+void resolveServerInvite();
+
+function addCompactPin(url) {
+  if (!meetingPin) {
+    url.searchParams.set('p', 'off');
+    return;
+  }
+  const isDefaultPosition = Math.abs(meetingPin.x - DEFAULT_PIN.x) < 0.05 && Math.abs(meetingPin.y - DEFAULT_PIN.y) < 0.05;
+  if (isDefaultPosition && meetingPin.label === DEFAULT_PIN.label) return;
+  // Tọa độ lưu ở đơn vị 1/10%, mã hóa base36 để ngắn hơn "39.4,58.8".
+  url.searchParams.set('p', `${Math.round(meetingPin.x * 10).toString(36)}.${Math.round(meetingPin.y * 10).toString(36)}`);
+  if (meetingPin.label !== DEFAULT_PIN.label) url.searchParams.set('s', encodeCompactName(meetingPin.label));
+}
+
 function syncPinURL() {
   const url = new URL(window.location.href);
-  if (meetingPin) {
-    url.searchParams.set('pin', `${meetingPin.x.toFixed(1)},${meetingPin.y.toFixed(1)}`);
-    url.searchParams.set('spot', meetingPin.label);
-  } else {
-    url.searchParams.set('pin', 'off');
-    url.searchParams.delete('spot');
-  }
+  for (const key of ['pin', 'spot', 'p', 's']) url.searchParams.delete(key);
+  addCompactPin(url);
   window.history.replaceState(null, '', url);
 }
 
@@ -237,43 +301,34 @@ function nameInitials(fullName) {
     .replace(/[^A-Za-z0-9]/g, '').toUpperCase().slice(0, 8) || 'KM';
 }
 
-function allocateGuestCode(name, salutation) {
-  const storageKey = 'hai-invite-shortcodes-v1';
-  const identity = `${salutation}|${name.normalize('NFC').toLocaleLowerCase('vi-VN')}`;
-  let registry = {};
-  try { registry = JSON.parse(localStorage.getItem(storageKey) || '{}'); } catch { /* chế độ riêng tư */ }
-  if (registry[identity]) return registry[identity];
-  const base = nameInitials(name);
-  const used = new Set(Object.values(registry));
-  let code = base;
-  let suffix = 2;
-  while (used.has(code)) code = `${base}${suffix++}`;
-  registry[identity] = code;
-  try { localStorage.setItem(storageKey, JSON.stringify(registry)); } catch { /* URL vẫn tự chứa tên */ }
-  return code;
+function createServerCodeURL(code) {
+  const url = new URL(window.location.href);
+  url.search = '';
+  url.searchParams.set('k', code);
+  return url;
 }
 
 function createShareableURL(name, salutation = salutationCode, code = null) {
   const url = new URL(window.location.href);
-  url.searchParams.delete('builder');
-  url.searchParams.delete('guest');
+  url.search = '';
+  if (serverCode && name === requestedGuest && salutation === salutationCode && (code === null || code === serverCode)) {
+    url.searchParams.set('k', serverCode);
+    return url;
+  }
   if (name) {
-    url.searchParams.set('i', code || url.searchParams.get('i') || nameInitials(name));
-    url.searchParams.set('g', encodeCompactName(name));
-    url.searchParams.set('x', salutation);
-  } else {
-    url.searchParams.delete('i');
-    url.searchParams.delete('g');
-    url.searchParams.delete('x');
+    const inviteCode = code || shortInvite?.code || qs.get('i') || nameInitials(name);
+    const shortSalutation = Object.keys(SHORT_SALUTATIONS).find((key) => SHORT_SALUTATIONS[key] === salutation) || 'b';
+    url.searchParams.set('m', `${inviteCode}.${shortSalutation}.${encodeCompactName(name)}`);
   }
-  if (meetingPin) {
-    url.searchParams.set('pin', `${meetingPin.x.toFixed(1)},${meetingPin.y.toFixed(1)}`);
-    url.searchParams.set('spot', meetingPin.label);
-  } else {
-    url.searchParams.set('pin', 'off');
-    url.searchParams.delete('spot');
-  }
+  addCompactPin(url);
   return url;
+}
+
+// Các link cũ vẫn đọc được, nhưng thanh địa chỉ tự chuyển sang định dạng ngắn.
+if (['guest', 'i', 'g', 'x', 'pin', 'spot'].some((key) => qs.has(key))) {
+  const compactURL = createShareableURL(requestedGuest, salutationCode, qs.get('i'));
+  if (qs.get('builder') === '1') compactURL.searchParams.set('builder', '1');
+  try { window.history.replaceState(null, '', compactURL); } catch { /* mở file trên máy */ }
 }
 
 if (qs.get('builder') === '1') {
@@ -298,7 +353,7 @@ if (qs.get('builder') === '1') {
     meetingPin = {
       x: Math.round(x * 10) / 10,
       y: Math.round(y * 10) / 10,
-      label: pinNameInput.value.trim().slice(0, 70) || 'Điểm hẹn chụp ảnh',
+      label: normalizeMeetingLabel(pinNameInput.value),
     };
     renderMeetingPin();
     pinLayer.classList.remove('editing');
@@ -310,7 +365,7 @@ if (qs.get('builder') === '1') {
 
   document.getElementById('pin-save-button').addEventListener('click', async () => {
     if (!meetingPin) return showToast('Hãy chấm một vị trí PIN trên bản đồ trước.');
-    meetingPin.label = pinNameInput.value.trim().slice(0, 70) || 'Điểm hẹn chụp ảnh';
+    meetingPin.label = normalizeMeetingLabel(pinNameInput.value);
     renderMeetingPin();
     syncPinURL();
     const url = createShareableURL(requestedGuest).href;
@@ -329,6 +384,54 @@ if (qs.get('builder') === '1') {
     pinShareOutput.textContent = 'Đã xóa PIN khỏi đường dẫn hiện tại.';
     showToast('Đã xóa điểm hẹn.');
   });
+}
+
+// Mở đầu theo phong cách bảng khởi hành: lật từng ô chữ, chạm/xé vé để vào thiệp.
+const departureIntro = document.getElementById('departure-intro');
+if (departureIntro) {
+  departureIntro.querySelectorAll('[data-flip-value]').forEach((row, rowIndex) => {
+    const letters = [...row.dataset.flipValue];
+    row.replaceChildren();
+    letters.forEach((letter, letterIndex) => {
+      const tile = document.createElement('span');
+      tile.className = `flap-tile${letter === ' ' ? ' is-blank' : ''}`;
+      tile.textContent = letter === ' ' ? '\u00a0' : letter;
+      tile.setAttribute('aria-hidden', 'true');
+      tile.style.animationDelay = `${rowIndex * 125 + letterIndex * 45}ms`;
+      row.append(tile);
+    });
+  });
+
+  if (qs.get('builder') === '1') {
+    departureIntro.hidden = true;
+    document.body.classList.remove('intro-active');
+  } else {
+    let isTearing = false;
+    function tearTicket() {
+      if (isTearing) return;
+      isTearing = true;
+      departureIntro.classList.add('is-opening');
+      const wait = window.matchMedia('(prefers-reduced-motion: reduce)').matches ? 0 : 540;
+      window.setTimeout(() => {
+        document.body.classList.remove('intro-active');
+        departureIntro.hidden = true;
+        window.scrollTo({ top: 0, behavior: 'instant' });
+      }, wait);
+    }
+    document.getElementById('tear-ticket').addEventListener('click', tearTicket);
+    let downY = null;
+    departureIntro.addEventListener('pointerdown', (event) => { downY = event.clientY; });
+    departureIntro.addEventListener('pointerup', (event) => {
+      if (downY !== null && event.clientY - downY > 55) tearTicket();
+      downY = null;
+    });
+    window.addEventListener('wheel', (event) => {
+      if (document.body.classList.contains('intro-active') && event.deltaY > 25) tearTicket();
+    }, { passive: true });
+    window.addEventListener('keydown', (event) => {
+      if (document.body.classList.contains('intro-active') && ['ArrowDown', 'PageDown'].includes(event.key)) tearTicket();
+    });
+  }
 }
 
 // Mặc định muốn phát nhạc: thử autoplay và bắt đầu ở tương tác đầu tiên nếu bị chặn.
@@ -461,23 +564,44 @@ if (qs.get('builder') === '1') {
   const form = document.getElementById('guest-form');
   const input = document.getElementById('guest-input');
   const salutationSelect = document.getElementById('guest-salutation');
+  const adminInput = document.getElementById('invite-admin-key');
   const codePreview = document.getElementById('guest-short-code');
   const output = document.getElementById('builder-output');
   input.value = requestedGuest;
   salutationSelect.value = salutationCode;
+  try { adminInput.value = localStorage.getItem('hai-invite-admin-key-v1') || ''; } catch { /* trình duyệt riêng tư */ }
 
   input.addEventListener('input', () => { codePreview.textContent = input.value.trim() ? nameInitials(input.value) : '—'; });
 
   form.addEventListener('submit', async (event) => {
     event.preventDefault();
     const name = input.value.trim();
-    if (!name) return;
+    const adminKey = adminInput.value.trim();
+    if (!name || !adminKey) return;
     const salutation = salutationSelect.value;
-    const code = allocateGuestCode(name, salutation);
-    const url = createShareableURL(name, salutation, code);
-    const copied = await copyText(url.href);
-    codePreview.textContent = code;
-    output.textContent = url.href;
-    showToast(copied ? 'Đã tạo và sao chép link khách mời!' : 'Đã tạo link. Sao chép đường dẫn ở phía dưới.');
+    const button = form.querySelector('button[type="submit"]');
+    button.disabled = true;
+    button.textContent = 'ĐANG LƯU MÃ…';
+    try {
+      const response = await fetch(`${INVITE_API_BASE}/api/invites`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', 'X-Invite-Admin-Key': adminKey },
+        body: JSON.stringify({ name, salutation, pin: meetingPin }),
+      });
+      const data = await response.json();
+      if (!response.ok || !data.code) throw new Error(data.error || 'Không lưu được mã khách mời.');
+      try { localStorage.setItem('hai-invite-admin-key-v1', adminKey); } catch { /* trình duyệt riêng tư */ }
+      const url = createServerCodeURL(data.code);
+      const copied = await copyText(url.href);
+      codePreview.textContent = data.code;
+      output.textContent = url.href;
+      showToast(copied ? 'Đã tạo mã riêng và sao chép link!' : 'Đã lưu mã. Sao chép link bên dưới nhé!');
+    } catch (error) {
+      output.textContent = error.message || 'Không kết nối được máy chủ lưu mã.';
+      showToast('Không lưu được mã. Kiểm tra mã quản trị và thử lại.');
+    } finally {
+      button.disabled = false;
+      button.textContent = 'Tạo & sao chép link cá nhân';
+    }
   });
 }

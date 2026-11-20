@@ -466,3 +466,111 @@ body{
   .action-button{min-height:46px;font-size:12px}
   .map-with-routes.expanded{width:98vw;border-width:3px;padding:3px;border-radius:11px}
 }
+
+/* PIN vàng nhỏ gọn để không che tuyến đường; giữ hiệu ứng nổi và nhịp sáng. */
+.meeting-pin{width:29px;height:34px;filter:drop-shadow(0 2px 4px #17395d80)}
+.pin-icon{line-height:34px}
+.pin-icon svg{width:25px;height:32px}
+.pin-pulse{bottom:1px;width:13px;height:7px;box-shadow:0 0 0 3px #f6ba3845}
+.pin-label{bottom:33px;min-width:0;max-width:112px;padding:4px 7px;border-width:1px;border-radius:6px;font-size:10px;line-height:1.2;box-shadow:0 3px 7px #00193440}
+@media(max-width:600px){
+  .meeting-pin{width:27px;height:32px}
+  .pin-icon svg{width:23px;height:30px}
+  .pin-label{bottom:31px;max-width:100px;padding:3px 5px;font-size:9px}
+}
+
+/* Màn mở đầu lấy cảm hứng từ bảng khởi hành và tấm vé xé sân bay. */
+body.intro-active .app-shell{max-width:1010px;padding:clamp(16px,3vh,36px) 20px 26px}
+body.intro-active .eyebrow-row,body.intro-active .boarding-pass,body.intro-active .site-footer,body.intro-active .link-builder{display:none!important}
+body:not(.intro-active) .departure-intro{display:none!important}
+.departure-intro{max-width:940px;margin:auto;transition:opacity .55s ease,transform .55s ease;font-family:'Be Vietnam Pro',Arial,sans-serif}
+.departure-intro.is-opening{opacity:0;transform:translateY(-55px) scale(.97);pointer-events:none}
+.departure-board{background:#050609;color:#f9f5e9;border:7px solid #12213d;border-radius:33px;padding:27px 33px 34px;box-shadow:0 0 0 1px #31466c50,0 16px 50px #020a1c55,inset 0 0 20px #050608}
+.departure-board-heading{display:flex;align-items:center;justify-content:space-between;gap:12px;padding-bottom:25px;border-bottom:1px solid #293346}
+.departure-board-brand{display:flex;gap:16px;align-items:center;min-width:0}
+.departure-board-brand img{width:62px;height:62px;object-fit:contain;border-radius:12px;background:#fff;padding:4px;flex-shrink:0}
+.departure-board-brand>span{color:#f1b33e;font-size:28px;line-height:1}
+.departure-board-brand strong,.departure-board-vn{font:800 clamp(15px,2.5vw,27px)/1.1 ui-monospace,SFMono-Regular,Consolas,monospace;letter-spacing:.2em;color:#efb646;white-space:nowrap}
+.departure-board-vn{font-size:clamp(14px,2.15vw,24px);letter-spacing:.17em}
+.departure-board-rows{padding-top:19px}
+.departure-board-row{display:grid;grid-template-columns:120px minmax(0,1fr) 20px;gap:15px;align-items:center;min-height:70px}
+.departure-row-label{font:500 18px/1.2 ui-monospace,SFMono-Regular,Consolas,monospace;letter-spacing:.1em;color:#8590a5}
+.departure-tiles{display:flex;align-items:center;gap:5px;min-width:0}
+.flap-tile{position:relative;display:inline-grid;place-items:center;flex:0 0 clamp(24px,4vw,46px);height:59px;border-radius:7px;background:#1e2636;color:#f4f2ed;font:800 clamp(17px,2.5vw,31px)/1 ui-monospace,SFMono-Regular,Consolas,monospace;text-shadow:0 2px 1px #0007;box-shadow:0 2px 0 #080b14;animation:flap-in .65s backwards;transform-origin:center}
+.flap-tile:after{content:'';position:absolute;top:50%;left:0;right:0;border-top:1px solid #080b14a8;box-shadow:0 1px 0 #51617b33;pointer-events:none}
+.flap-tile.is-blank{color:transparent}
+.departure-status .flap-tile{color:#44dc8b;text-shadow:0 0 10px #34cb78aa}
+.departure-led{width:17px;height:17px;border-radius:50%;background:#38d47e;box-shadow:0 0 14px 5px #36d98455;animation:departure-led 2s ease-in-out infinite}
+.departure-invitation{--tear-height:145px;position:relative;margin:24px 8px 0;border-radius:34px;overflow:hidden;box-shadow:0 24px 55px #00102655}
+.departure-invitation:before,.departure-invitation:after{content:'';position:absolute;z-index:3;bottom:calc(var(--tear-height) - 20px);width:42px;height:42px;background:#09182e;border-radius:50%;pointer-events:none}
+.departure-invitation:before{left:-21px}.departure-invitation:after{right:-21px}
+.departure-invitation-main{min-height:390px;padding:38px 47px 30px;background:radial-gradient(circle at 23% 25%,#fffcf7 0%,transparent 55%),linear-gradient(110deg,#f8f0df 78%,#c1e5ff 100%);border-bottom:3px dashed #f5c879}
+.departure-airline{display:flex;align-items:center;gap:13px;font-weight:800;font-size:clamp(12px,1.7vw,19px);color:#506681;letter-spacing:.02em}
+.departure-airline img{width:47px;height:47px;object-fit:contain}
+.departure-invitation h2{font-size:clamp(35px,5.2vw,66px);line-height:1.16;font-weight:900;letter-spacing:-.075em;color:#112443;margin:34px 0 22px}
+.departure-invitation h2 em{font-style:normal;color:#d42d48;letter-spacing:-.07em}
+.departure-passenger{display:flex;flex-wrap:wrap;gap:15px;align-items:center;margin:0;color:#64758d;font:500 20px/1.4 ui-monospace,SFMono-Regular,Consolas,monospace;letter-spacing:.035em}
+.departure-passenger strong{font-weight:650;color:#4b607b;overflow-wrap:anywhere}
+.departure-tear{width:100%;height:var(--tear-height);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:12px;border:0;background:#edb448;color:#0e2648;font:800 clamp(13px,2vw,22px)/1.4 ui-monospace,SFMono-Regular,Consolas,monospace;letter-spacing:.12em;text-align:center;transition:background .2s;touch-action:pan-y}
+.departure-tear:hover{background:#f5c364}.departure-tear:active{background:#ffd47a}
+.tear-down{font-size:38px;font-weight:400;line-height:1;animation:tear-down 1.3s ease-in-out infinite}
+.departure-pagination{display:flex;align-items:center;justify-content:space-around;max-width:790px;margin:37px auto 0;gap:12px}
+.departure-pagination span{height:10px;width:10px;border-radius:50%;background:#66573c;opacity:.72}
+.departure-pagination span.active{background:#f1b747;box-shadow:0 0 12px #f1b74788}
+.builder-admin{margin-top:14px}
+.builder-admin label{display:block;font-size:12px;font-weight:800;color:#19496f;margin-bottom:7px}
+.builder-admin input{width:100%;min-height:45px;border:1px solid #b8d2e8;border-radius:9px;padding:10px 12px;font:inherit;font-size:15px;color:#102d53;background:#fff}
+.builder-admin small{display:block;margin-top:6px;font-size:11px;line-height:1.5;color:#5c7188}
+.builder-controls button:disabled{opacity:.65;cursor:wait}
+@keyframes flap-in{from{opacity:.35;transform:rotateX(-88deg)}70%{transform:rotateX(13deg)}to{opacity:1;transform:rotateX(0)}}
+@keyframes departure-led{0%,100%{opacity:.8;box-shadow:0 0 8px #36d98455}50%{opacity:1;box-shadow:0 0 20px 8px #36d98455}}
+@keyframes tear-down{0%,100%{transform:translateY(-3px)}50%{transform:translateY(6px)}}
+@media(max-width:650px){
+  body.intro-active .app-shell{padding:14px 9px 24px}
+  .departure-board{padding:16px 12px 20px;border-width:5px;border-radius:22px}
+  .departure-board-heading{padding-bottom:13px}
+  .departure-board-brand{gap:7px}
+  .departure-board-brand img{width:37px;height:37px;padding:2px;border-radius:8px}
+  .departure-board-brand>span{font-size:19px}
+  .departure-board-brand strong{font-size:clamp(12px,3.2vw,17px);letter-spacing:.09em}
+  .departure-board-vn{font-size:clamp(10px,2.9vw,15px);letter-spacing:.045em}
+  .departure-board-rows{padding-top:11px}
+  .departure-board-row{grid-template-columns:54px minmax(0,1fr) 12px;gap:6px;min-height:45px}
+  .departure-row-label{font-size:10px;letter-spacing:0}
+  .departure-tiles{gap:2px}
+  .flap-tile{flex:1 1 0;min-width:0;max-width:24px;height:34px;border-radius:4px;font-size:clamp(12px,3.5vw,19px)}
+  .departure-led{width:10px;height:10px}
+  .departure-invitation{--tear-height:106px;margin:16px 2px 0;border-radius:22px}
+  .departure-invitation:before,.departure-invitation:after{width:28px;height:28px;bottom:calc(var(--tear-height) - 14px)}
+  .departure-invitation:before{left:-14px}.departure-invitation:after{right:-14px}
+  .departure-invitation-main{min-height:325px;padding:25px 20px 22px}
+  .departure-airline{gap:8px;font-size:clamp(10px,3vw,13px)}
+  .departure-airline img{width:31px;height:31px}
+  .departure-invitation h2{font-size:clamp(30px,8.4vw,46px);margin:27px 0 20px}
+  .departure-passenger{font-size:clamp(11px,3.5vw,15px);gap:7px}
+  .departure-tear{font-size:clamp(11px,2.8vw,15px);letter-spacing:.025em;padding:10px 15px;gap:7px}
+  .tear-down{font-size:29px}
+  .departure-pagination{margin-top:24px}
+  .departure-pagination span{width:7px;height:7px}
+}
+@media(prefers-reduced-motion:reduce){.departure-intro,.flap-tile,.departure-led,.tear-down{animation:none!important;transition:none!important}}
+
+/* Thay khối thông tin lặp bằng bốn hướng dẫn chi tiết, dễ đọc trên điện thoại. */
+.arrival-guide{margin-top:21px}
+.arrival-guide-heading{padding:0 2px 11px;border-bottom:1px solid #d9c8ad}
+.arrival-guide-heading>span{display:block;color:#a67538;font-size:11px;font-weight:800;letter-spacing:.1em}
+.arrival-guide-heading h3{margin:5px 0 0;font-size:20px;color:#112c50;letter-spacing:-.025em}
+.arrival-guide-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:13px}
+.arrival-card{min-width:0;padding:15px 14px;background:#fffdf7;border:1px solid #d8e3ef;border-top:4px solid #d3a64e;border-radius:12px;box-shadow:0 3px 8px #112b4410}
+.arrival-card h4{display:flex;align-items:center;flex-wrap:wrap;gap:4px 7px;margin:0 0 10px;font-size:15px;line-height:1.4;color:#143554;font-weight:800}
+.arrival-card h4>span{font-size:20px;line-height:1}
+.arrival-card h4 small{font-size:11px;font-weight:750;color:#61758c}
+.arrival-card p{font-size:13px;line-height:1.65;color:#394d62;margin:0;overflow-wrap:break-word}
+.arrival-card p strong{color:#102d51;font-weight:800}
+.arrival-card.meeting{border-top-color:#d1a13a;background:#fff9e9}
+.arrival-card.park-one{border-top-color:#2478c5}
+.arrival-card.park-three{border-top-color:#21a562}
+.arrival-card.hall{border-top-color:#8264c8}
+@media(max-width:1130px){.arrival-guide-grid{grid-template-columns:1fr}}
+@media(max-width:850px){.arrival-guide-grid{grid-template-columns:1fr 1fr}}
+@media(max-width:600px){.arrival-guide-grid{grid-template-columns:1fr}.arrival-card{padding:13px}.arrival-card p{font-size:13px}.arrival-guide-heading h3{font-size:18px}}

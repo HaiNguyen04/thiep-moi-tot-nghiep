@@ -7,20 +7,44 @@
     <meta name="description" content="Thiệp mời lễ tốt nghiệp Nguyễn Ngọc Hải – Trường Đại học Bách khoa, ĐHQG-HCM, ngày 27.11.2026." />
     <meta property="og:title" content="Thiệp mời tốt nghiệp | Nguyễn Ngọc Hải" />
     <meta property="og:description" content="Một tấm vé đặc biệt dành cho bạn. Hẹn gặp tại lễ tốt nghiệp của Hải!" />
-    <title>Thiệp mời lễ tốt nghiệp - Nguyễn Ngọc Hải</title>
+    <title>Thiệp mời lễ tốt nghiệp — Nguyễn Ngọc Hải</title>
     <link rel="icon" href="assets/favicon.svg" type="image/svg+xml" />
     <link rel="stylesheet" href="style.css" />
     <script src="script.js" defer></script>
   </head>
-  <body>
+  <body class="intro-active">
     <div class="sky" aria-hidden="true"><span class="star s1"></span><span class="star s2"></span><span class="star s3"></span><span class="star s4"></span><span class="star s5"></span><span class="star s6"></span><span class="star s7"></span><span class="star s8"></span></div>
 
     <main class="app-shell">
+      <section id="departure-intro" class="departure-intro" aria-label="Vé mở đầu chuyến bay tốt nghiệp">
+        <div class="departure-board">
+          <div class="departure-board-heading">
+            <div class="departure-board-brand"><img src="assets/hcmut-logo.png" alt="Logo Trường Đại học Bách khoa" /><span aria-hidden="true">✈</span><strong>DEPARTURES</strong></div>
+            <strong class="departure-board-vn">KHỞI HÀNH</strong>
+          </div>
+          <div class="departure-board-rows" aria-label="Thông tin chuyến bay">
+            <div class="departure-board-row"><span class="departure-row-label">FLIGHT</span><span class="departure-tiles" data-flip-value="HCMUT-2026" aria-label="Chuyến bay HCMUT 2026"></span></div>
+            <div class="departure-board-row"><span class="departure-row-label">TO</span><span class="departure-tiles" data-flip-value="CỬ NHÂN" aria-label="Điểm đến: Cử nhân"></span></div>
+            <div class="departure-board-row"><span class="departure-row-label">TIME</span><span class="departure-tiles" data-flip-value="27/11 15:00" aria-label="Thời gian: 15 giờ ngày 27 tháng 11"></span></div>
+            <div class="departure-board-row departure-status"><span class="departure-row-label">STATUS</span><span class="departure-tiles" data-flip-value="BOARDING" aria-label="Trạng thái: Đang lên máy bay"></span><span class="departure-led" aria-hidden="true"></span></div>
+          </div>
+        </div>
+        <div class="departure-invitation">
+          <div class="departure-invitation-main">
+            <div class="departure-airline"><img src="assets/hcmut-logo.png" alt="" /><span>GRADUATION AIR · ĐH BÁCH KHOA</span></div>
+            <h2>Bạn có <em>1 vé</em><br />lên chuyến bay<br />tốt nghiệp</h2>
+            <p class="departure-passenger"><span>HÀNH KHÁCH</span><span aria-hidden="true">▸</span><strong id="intro-passenger">NGUYỄN NGỌC HẢI</strong></p>
+          </div>
+          <button id="tear-ticket" class="departure-tear" type="button" aria-label="Xé vé và mở thiệp mời chi tiết"><span>✂ &nbsp; KÉO XUỐNG HOẶC CHẠM ĐỂ XÉ VÉ</span><span class="tear-down" aria-hidden="true">↓</span></button>
+        </div>
+        <div class="departure-pagination" aria-hidden="true"><span></span><span></span><span></span><span></span><span class="active"></span><span class="active"></span><span></span><span></span></div>
+      </section>
+
       <div class="eyebrow-row">
         <span class="eyebrow-line"></span>
-        <span>HCMUT GRADUATION INVITATION</span>
+        <span>BÁCH KHOA · TỐT NGHIỆP 2026</span>
         <span class="eyebrow-sparkle" aria-hidden="true">•</span>
-        <span>A DAY TO REMEMBER</span>
+        <span>MỘT TẤM VÉ DÀNH RIÊNG CHO BẠN</span>
         <span class="eyebrow-line"></span>
       </div>
 
@@ -28,7 +52,7 @@
         <div class="ticket-header">
           <div class="brand-lockup">
             <div class="brand-mark" aria-label="Logo Trường Đại học Bách khoa do Hải cung cấp"><img src="assets/hcmut-logo.png" alt="Logo BK TP.HCM" /></div>
-            <div class="brand-name"><span class="brand-icon" aria-hidden="true">✈</span><span>CHUYẾN BAY TỐT NGHIỆP</span><span class="brand-separator">/</span><span class="brand-school">TRƯỜNG ĐẠI HỌC BÁCH KHOA</span></div>
+            <div class="brand-name"><span class="brand-icon" aria-hidden="true">✈</span><span>CHUYẾN BAY TỐT NGHIỆP</span><span class="brand-separator">/</span><span class="brand-school">ĐH BÁCH KHOA</span></div>
           </div>
           <div class="header-right"><span class="header-year">2026</span><span class="header-class">THẺ LÊN MÁY BAY</span></div>
         </div>
@@ -46,7 +70,7 @@
                   <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M22 16.9v3a2 2 0 0 1-2.2 2A19.8 19.8 0 0 1 2.1 4.2 2 2 0 0 1 4.1 2h3a2 2 0 0 1 2 1.7l.5 3a2 2 0 0 1-.6 1.8L7.1 10a16 16 0 0 0 6.9 6.9l1.5-1.9a2 2 0 0 1 1.8-.6l3 .5a2 2 0 0 1 1.7 2Z"/></svg>
                   <span>0948 637 877</span>
                 </a>
-                <div class="achievement-pill">CHÍNH THỨC TỐT NGHIỆP</div>
+                <p class="university">Trường Đại học Bách khoa <span>·</span> ĐHQG-HCM</p>
               </div>
             </div>
 
@@ -58,7 +82,7 @@
 
             <div class="details-grid">
               <div class="detail"><span class="detail-label">MÃ CHUYẾN BAY</span><strong>BK-2026</strong></div>
-              <div class="detail"><span class="detail-label">THỜI GIAN</span><strong>THỨ SÁU - 27/11</strong></div>
+              <div class="detail"><span class="detail-label">NGÀY</span><strong>THỨ SÁU - 27/11</strong></div>
               <div class="detail"><span class="detail-label">HỘI TRƯỜNG</span><strong>A5</strong></div>
               <div class="detail detail-schedule"><span class="detail-label">TRƯỚC LỄ (CHỤP ẢNH)</span><strong>10:30 – 14:30</strong></div>
               <div class="detail detail-schedule detail-ceremony"><span class="detail-label">GIỜ LÀM LỄ</span><strong>15:00 – 16:30</strong></div>
@@ -69,11 +93,6 @@
               <span class="detail-label">ĐỊA ĐIỂM TỔ CHỨC</span>
               <div class="location-title"><span class="location-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 10c0 5-8 12-8 12S4 15 4 10a8 8 0 0 1 16 0Z"/><circle cx="12" cy="10" r="2.5"/></svg></span><strong>Hội trường A5 · Trường Đại học Bách khoa</strong></div>
               <p>268 Lý Thường Kiệt, TP. Hồ Chí Minh</p>
-            </div>
-
-            <div class="photo-meeting">
-              <div class="photo-meeting-title"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="5" width="18" height="15" rx="2"/><circle cx="12" cy="12.5" r="3.2"/><path d="M7.5 5 9 3h6l1.5 2"/></svg><span>ĐIỂM HẸN CHỤP ẢNH</span></div>
-              <p id="photo-meeting-text">Liên hệ Hải qua <a href="tel:0948637877">0948 637 877</a> để xác nhận vị trí hẹn.</p>
             </div>
 
             <div class="message-card">
@@ -96,7 +115,7 @@
             <div class="map-tabs" role="tablist" aria-label="Chọn thông tin chỉ đường"><button id="tab-map" class="map-tab active" type="button" role="tab" aria-selected="true" aria-controls="map-panel">Sơ đồ trường</button><button id="tab-meeting" class="map-tab" type="button" role="tab" aria-selected="false" aria-controls="meeting-panel">Điểm hẹn</button></div>
 
             <div id="map-panel" class="tab-panel" role="tabpanel" aria-labelledby="tab-map">
-              <div class="route-selector" role="group" aria-label="Chọn tuyến đường tới điểm hẹn chụp ảnh">
+              <div class="route-selector" role="group" aria-label="Chọn tuyến đường tới điểm hẹn">
                 <button class="route-option route-both active" type="button" data-route-choice="both" aria-pressed="true">Cả 2 tuyến</button>
                 <button class="route-option route-one-option" type="button" data-route-choice="gate1" aria-pressed="false"><span class="route-swatch gate-one-color"></span>Từ Cổng 1</button>
                 <button class="route-option route-three-option" type="button" data-route-choice="gate3" aria-pressed="false"><span class="route-swatch gate-three-color"></span>Từ Cổng 3</button>
@@ -170,11 +189,11 @@
                     <text x="1494" y="437" text-anchor="middle" fill="#c4f5d6" font-size="20" font-weight="800">SAU TÒA B10</text>
                   </g>
                 </svg>
-                <div id="pin-layer" class="pin-layer" aria-label="Lớp đánh dấu điểm hẹn chụp ảnh">
-                  <div id="meeting-pin" class="meeting-pin" role="img" aria-label="Điểm hẹn chụp ảnh" hidden>
+                <div id="pin-layer" class="pin-layer" aria-label="Lớp đánh dấu điểm hẹn">
+                  <div id="meeting-pin" class="meeting-pin" role="img" aria-label="Điểm hẹn" hidden>
                     <span class="pin-pulse" aria-hidden="true"></span>
                     <span class="pin-icon" aria-hidden="true"><svg viewBox="0 0 40 52" xmlns="http://www.w3.org/2000/svg"><path d="M20 2C10 2 3 9 3 19c0 13 17 31 17 31s17-18 17-31C37 9 30 2 20 2Z" fill="#d5a444" stroke="#fff" stroke-width="3"/><circle cx="20" cy="19" r="7" fill="#fff"/></svg></span>
-                    <span id="pin-label" class="pin-label">ĐIỂM HẸN CHỤP ẢNH</span>
+                    <span id="pin-label" class="pin-label">ĐIỂM HẸN</span>
                   </div>
                 </div>
                 <div class="map-badge"><span class="badge-live"></span> ĐÍCH ĐẾN · ĐIỂM HẸN</div>
@@ -185,9 +204,8 @@
                 <div class="road-guide-item"><span class="road-guide-mark road-guide-blue"></span><span><strong>ĐƯỜNG LÝ THƯỜNG KIỆT</strong><small>Vào Cổng 1</small></span></div>
                 <div class="road-guide-item"><span class="road-guide-mark road-guide-green"></span><span><strong>ĐƯỜNG TÔ HIẾN THÀNH</strong><small>Vào Cổng 3</small></span></div>
               </div>
-              <div class="parking-guide" aria-label="Vị trí hai bãi đỗ xe"><span><b>P</b> Bãi xe 1 · gần Cổng 1</span><span><b>P</b> Bãi xe 2 · sau tòa B10</span></div>
               <div id="pin-editor" class="pin-editor" hidden>
-                <div class="pin-editor-heading"><strong>📍 ĐẶT ĐIỂM HẸN CHỤP ẢNH</strong><span>Dành cho Hải khi tạo link mời</span></div>
+                <div class="pin-editor-heading"><strong>📍 ĐẶT ĐIỂM HẸN</strong><span>Dành cho Hải khi tạo link mời</span></div>
                 <button id="pin-pick-button" class="pin-pick-button" type="button">Chấm PIN trực tiếp trên bản đồ</button>
                 <label for="pin-name-input">Tên điểm hẹn</label>
                 <input id="pin-name-input" type="text" maxlength="70" placeholder="Ví dụ: Góc bên phải sân banh" />
@@ -195,20 +213,19 @@
                 <output id="pin-share-output" aria-live="polite"></output>
               </div>
               <div class="gate-warning" role="note"><span aria-hidden="true">⚠</span><p><strong>CỔNG 2 CHỈ DÀNH CHO GIÁO VIÊN.</strong><br />Khách mời vui lòng đi <strong>Cổng 1</strong> hoặc <strong>Cổng 3</strong> để vào trường.</p></div>
-              <p class="map-disclaimer">* Ảnh bản đồ gốc do Hải cung cấp. Tuyến đi vẽ trên ảnh nhằm gợi ý định hướng; vui lòng kiểm tra lối đi thực tế khi đến trường.</p>
             </div>
 
             <div id="meeting-panel" class="tab-panel meeting-panel" role="tabpanel" aria-labelledby="tab-meeting" hidden><div class="meeting-illustration"><div class="meeting-big-icon" aria-hidden="true">🎓</div><span class="meeting-sup">HẸN GẶP TẠI</span><h3>HỘI TRƯỜNG A5</h3><p>Trường Đại học Bách khoa · Cơ sở 1</p><div class="meeting-meta"><span>Thứ Sáu</span><strong>27.11.2026</strong><span>15:00 – 16:30</span></div><p class="meeting-photo-note">Chụp ảnh: 10:30–14:30 và 16:30–17:30</p></div></div>
 
-            <div class="travel-info">
-              <div class="travel-heading"><span class="travel-heading-icon" aria-hidden="true">⌁</span><span>THÔNG TIN ĐẾN LỄ</span></div>
-              <div class="travel-row"><span class="travel-dot"></span><div><strong>Địa điểm:</strong> Hội trường A5, khuôn viên Trường ĐH Bách khoa — Cơ sở 1.</div></div>
-              <div class="travel-row"><span class="travel-dot"></span><div><strong>Giờ làm lễ:</strong> 15:00–16:30, Thứ Sáu ngày 27/11/2026.</div></div>
-              <div class="travel-row"><span class="travel-dot"></span><div><strong>Giờ chụp ảnh:</strong> Trước lễ 10:30–14:30; sau lễ 16:30–17:30.</div></div>
-              <div class="travel-row"><span class="travel-dot"></span><div><strong>Lối vào dành cho khách:</strong> Cổng 1 trên đường Lý Thường Kiệt hoặc Cổng 3 trên đường Tô Hiến Thành.</div></div>
-              <div class="travel-row"><span class="travel-dot"></span><div><strong>Lưu ý:</strong> Cổng 2 dành riêng cho giáo viên. Không vào bằng Cổng 2.</div></div>
-              <div class="travel-advice"><span>Đừng quên giữ lại tấm vé này — Hải đợi bạn ở ngày tốt nghiệp!</span></div>
-            </div>
+            <section class="arrival-guide" aria-label="Hướng dẫn chi tiết đến điểm hẹn, bãi đỗ xe và hội trường">
+              <div class="arrival-guide-heading"><span>HƯỚNG DẪN CHI TIẾT</span><h3>ĐẾN ĐÚNG ĐIỂM HẸN</h3></div>
+              <div class="arrival-guide-grid">
+                <article class="arrival-card meeting"><h4><span aria-hidden="true">📸</span> Điểm hẹn <small>(Góc biên phải sân banh)</small></h4><p>Đi từ <strong>Cổng 1 Lý Thường Kiệt</strong> vào, hẹn mọi người ở nửa góc bên phải biên sân banh — có cây xanh mát, chỗ ngồi nghỉ và đứng chụp ảnh cực ổn.</p></article>
+                <article class="arrival-card park-one"><h4><span aria-hidden="true">🅿</span> Bãi xe 1 <small>(Cổng 1 · LTK)</small></h4><p>Vào <strong>Cổng 1 (268 Lý Thường Kiệt)</strong>, đi thẳng tới bãi giữ xe ngay góc khuôn viên phía Lý Thường Kiệt, rồi đi bộ qua sân banh (khoảng 2 phút).</p></article>
+                <article class="arrival-card park-three"><h4><span aria-hidden="true">🅿</span> Bãi xe 2 <small>(Sau B10 · Cổng 3)</small></h4><p>Vào <strong>Cổng 3 đường Tô Hiến Thành</strong>, đi thẳng vào lối giữa dãy <strong>nhà B và nhà C</strong> (ngay phía sau tòa <strong>B10</strong>) sẽ thấy bãi xe, rồi đi bộ hướng về A5 – sân banh (khoảng 3 phút).</p></article>
+                <article class="arrival-card hall"><h4><span aria-hidden="true">🎓</span> HT A5 <small>(Hội trường A5 · Nơi làm lễ)</small></h4><p>Khu vực làm lễ trao bằng (14:30–17:30), cách điểm hẹn sân banh khoảng 1 phút đi bộ.</p></article>
+              </div>
+            </section>
 
             <div class="action-grid"><a id="maps-link" class="action-button primary-action" target="_blank" rel="noopener noreferrer" href="https://www.google.com/maps/search/?api=1&amp;query=Hoi%20truong%20A5%20Dai%20hoc%20Bach%20Khoa%20268%20Ly%20Thuong%20Kiet"><span aria-hidden="true">📍</span> XEM GOOGLE MAPS</a><button id="calendar-button" class="action-button" type="button"><span aria-hidden="true">▦</span> LƯU LỊCH</button><button id="share-button" class="action-button wide-action" type="button"><span aria-hidden="true">↗</span> CHIA SẺ THIỆP MỜI</button></div>
             <div class="barcode-card"><div class="barcode" aria-hidden="true"></div><div class="barcode-caption"><span>NGUYỄN NGỌC HẢI</span><span>BÁCH KHOA · 27/11/26 · A5</span></div></div>
@@ -227,8 +244,9 @@
             <div><label for="guest-salutation">Xưng hô</label><select id="guest-salutation" name="salutation"><option value="ban">Bạn</option><option value="anh">Anh</option><option value="chi">Chị</option><option value="em">Em</option><option value="co">Cô</option><option value="chu">Chú</option><option value="gia-dinh">Gia đình</option><option value="thay">Thầy</option></select></div>
             <div><label for="guest-input">Tên khách mời</label><input id="guest-input" name="guest" type="text" maxlength="70" placeholder="Ví dụ: Nguyễn Ngọc Hải" autocomplete="name" required /></div>
           </div>
+          <div class="builder-admin"><label for="invite-admin-key">Mã quản trị của Hải</label><input id="invite-admin-key" type="password" minlength="16" autocomplete="off" placeholder="Nhập mã quản trị để lưu link ngắn" required /><small>Mã được giữ trên trình duyệt của Hải, không xuất hiện trong link gửi khách.</small></div>
           <div class="builder-controls"><button type="submit">Tạo &amp; sao chép link cá nhân</button></div>
-          <div class="builder-code">Mã khách mời: <strong id="guest-short-code">—</strong> <span>(tự thêm số nếu trùng mã)</span></div>
+          <div class="builder-code">Mã khách mời: <strong id="guest-short-code">—</strong> <span>(tự lưu trên máy chủ; trùng mã sẽ thêm số 2, 3…)</span></div>
           <output id="builder-output" aria-live="polite"></output>
         </form>
       </section>
