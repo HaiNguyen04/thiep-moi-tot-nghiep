@@ -97,3 +97,290 @@ body.map-expanded{overflow:hidden}
 @media(max-width:1150px){.brand-name{font-size:15px}.brand-school{font-size:13px}.route-destination strong{font-size:39px}.route-destination span{max-width:170px;font-size:11px}.details-grid .detail strong{font-size:14px}}
 @media(max-width:850px){.route-destination strong{font-size:45px}.route-destination span{max-width:220px;font-size:11px}.details-grid .detail strong{font-size:16px}}
 @media(max-width:500px){.brand-school{display:none}.brand-name{font-size:11px;gap:4px}.header-class{font-size:9px}.route-destination strong{font-size:36px}.route-destination span{max-width:150px;font-size:10px}.details-grid .detail strong{font-size:12px}.road-guide{grid-template-columns:1fr}.gate-warning p{font-size:12px}.closing-note p{font-size:13px}.barcode-caption{font-size:9px}}
+
+/* ================================================================
+   BÁCH KHOA PREMIUM · NAVY / SAPPHIRE / GOLD
+   Distinct airline-ticket redesign, preserving the authentic assets.
+   ================================================================ */
+:root{
+  --navy:#0c2548;
+  --navy-dark:#06172f;
+  --red:#1267af;
+  --gold:#d3a44e;
+  --paper:#ffffff;
+  --paper-warm:#f1f5fb;
+  --cream-white:#fffdf8;
+  --muted:#5c7089;
+  --border:#dbe5ef;
+}
+body{
+  background:
+    radial-gradient(ellipse 50% 45% at 12% 13%,#1b4f8d88,transparent 75%),
+    radial-gradient(ellipse 50% 45% at 90% 65%,#0f518166,transparent 78%),
+    linear-gradient(145deg,#091d3a 5%,#051328 55%,#0a2548 100%);
+}
+.sky:before{opacity:.17}.sky:after{opacity:.11}
+.app-shell{max-width:1550px;padding-top:34px}
+.eyebrow-row{color:#c8d6eb;letter-spacing:.11em;font-weight:700;font-size:12px}
+.eyebrow-sparkle{color:#e6bd69;font-size:16px}
+.eyebrow-line{max-width:110px;background:linear-gradient(90deg,transparent,#bbd3ef88)}
+.boarding-pass{
+  border-radius:25px;
+  border:1px solid #b4c9e133;
+  background:#fff;
+  box-shadow:0 36px 100px #020e2459,0 2px 0 #fff7 inset;
+}
+.ticket-header{
+  min-height:98px;
+  padding:19px 37px;
+  background:linear-gradient(112deg,#081c39,#0b3364 51%,#0c568f 100%);
+  border-bottom:3px solid #d5ad5f;
+  position:relative;
+  overflow:hidden;
+}
+.ticket-header:after{
+  content:'';position:absolute;right:12%;top:-65px;width:260px;height:220px;
+  border-radius:50%;border:1px solid #ffffff20;box-shadow:0 0 0 36px #ffffff07,0 0 0 75px #ffffff05;
+  pointer-events:none;
+}
+.brand-lockup,.header-right{position:relative;z-index:1}
+.brand-mark{
+  width:55px;height:55px;border-radius:14px;
+  box-shadow:0 6px 18px #0005,0 0 0 1px #ffffff55;
+}
+.brand-mark img{width:118px;left:-33px;top:-10px}
+.brand-name{font-size:21px;letter-spacing:-.025em;gap:11px}
+.brand-school{font-size:15px;color:#c7e5ff;font-weight:700;letter-spacing:.015em}
+.brand-separator{color:#d5ad5f;opacity:1}
+.brand-icon{color:#e9c277;font-size:25px}
+.header-year{border-color:#dfbb7d7d;background:#ffffff12;color:#f1d197;font-size:14px;padding:8px 12px}
+.header-class{font-size:13px;letter-spacing:.08em;font-weight:800}
+.ticket-meta-bar{
+  display:flex;align-items:center;justify-content:space-between;gap:15px;
+  padding:12px 37px;
+  background:#f9f3e7;
+  border-bottom:1px solid #e6d9bc;
+  color:#4b5d77;font-size:12px;font-weight:800;letter-spacing:.075em;
+}
+.meta-brand{color:#164474}.meta-diamond{color:#be8d37;margin-right:5px}
+.meta-center{color:#9b7230}.meta-date span{color:#c4a674;margin:0 8px}
+.ticket-grid{grid-template-columns:minmax(0,1.01fr) minmax(0,.99fr)}
+.ticket-left{
+  background:linear-gradient(145deg,#ffffff 0%,#fdfefe 55%,#f8fbff 100%);
+  border-right:2px dashed #b8cce2;
+  padding:38px 39px 35px;
+}
+.ticket-right{background:#f6f9fe;padding:38px 37px 33px}
+.ticket-left:before,.ticket-left:after{background:#0d2e57;box-shadow:0 0 0 2px #f0f4fa}
+.passenger-area{gap:24px;align-items:center}
+.portrait-frame{
+  width:137px;height:137px;
+  border:5px solid #fff;
+  box-shadow:0 0 0 2px #b88b3e,0 0 0 7px #e6d9bc88,0 12px 28px #0b2a512b;
+}
+.section-kicker{color:#a27938;font-size:12px;letter-spacing:.09em}
+.kicker-dot{background:#d1a350}
+.passenger-copy h1{font-size:clamp(29px,2.8vw,43px);line-height:1.12;margin:11px 0 12px;color:#09254b;font-weight:900}
+.passenger-copy h1 span{color:#1466ac}
+.university{font-size:13px;color:#60748c}
+.achievement-pill{
+  background:#f7ecd1;color:#7b5b22;border:1px solid #e2ca95;
+  font-size:11px;letter-spacing:.035em;padding:10px 13px;line-height:1.35;
+}
+.achievement-pill span:first-child{color:#be8d35}
+.flight-route{
+  background:#f0f6fe;border:1px solid #deebf7;border-radius:15px;
+  padding:22px 19px;margin:32px 0 22px;gap:12px;
+}
+.route-stop strong{font-size:clamp(35px,3.2vw,51px);color:#0b315f;letter-spacing:-.045em}
+.route-destination strong{color:#1266ae}
+.route-stop span,.route-destination span{font-size:12px;color:#536d89;line-height:1.5;letter-spacing:.01em}
+.flight-path{min-width:43px}
+.path-line{border-color:#ba934c;border-top-width:2px}
+.flying-plane{background:#f0f6fe;color:#c59746}
+.details-grid{
+  background:#fff;border:1px solid #dce6f2;border-radius:14px;
+  padding:22px 18px;gap:20px 13px;
+  box-shadow:0 6px 24px #12386108;
+}
+.detail{padding-left:11px;border-left:2px solid #e8d4a5}
+.detail-label{font-size:11px;color:#617690;letter-spacing:.04em;line-height:1.35}
+.detail strong{font-size:16px;color:#102e55;line-height:1.45}
+.location-block{padding:23px 2px 17px}
+.location-title strong{color:#14375e;font-size:17px}
+.location-icon{color:#b88a35}
+.location-block p{color:#64768d;font-size:13px}
+.message-card{
+  background:linear-gradient(105deg,#fff7e9,#f8eddb);
+  border:1px solid #edd9b5;border-left:4px solid #d6aa5b;
+  box-shadow:0 6px 18px #8c672311;
+}
+.message-quote{color:#d0a151}
+.message-card p{color:#304767;font-size:15px}
+.countdown{
+  background:linear-gradient(115deg,#09254b,#0c4074);
+  border:1px solid #285584;
+  border-radius:14px;box-shadow:0 5px 0 #d4e2f1;
+  padding:20px 10px;
+}
+.countdown-title{font-size:12px;letter-spacing:.08em;color:#f4d594}
+.timer-numbers span{font-size:31px;color:#fff}
+.timer-numbers small{font-size:12px;color:#bdcee6}
+.guest-strip{
+  background:#ffffff;color:#102d53;
+  border:1.5px solid #d2ac63;border-radius:12px;
+  box-shadow:inset 0 0 0 4px #fbf6eb;
+  padding:15px 16px;min-height:57px;
+}
+.guest-strip span:nth-child(2),.guest-pencil,.guest-star{color:#a97927}
+.guest-strip strong{color:#112f55;font-size:16px}
+.gold-rule{background:#c99c4f}
+.closing-note p{font-family:'Be Vietnam Pro',Arial,sans-serif;color:#405a77;font-size:15px}
+.closing-note p span{color:#a5762d}
+.small-kicker{color:#a4742f;font-size:12px}
+.map-title-row h2{font-size:23px;color:#0a2d58}
+.map-title-icon{border-color:#d5b578;background:#fff7e8;color:#ba8d41}
+.map-tabs{background:#e4edf7;border:1px solid #d9e4f0}
+.map-tab{font-size:13px;color:#476581}
+.map-tab.active{background:#0f3969;box-shadow:0 4px 9px #14365c29}
+.map-tab:hover:not(.active){background:#fff;color:#163a63}
+.route-option{background:#fff;border-color:#d4e0ed;color:#375779;font-size:12px;min-height:45px}
+.route-option.active{background:#103861;border-color:#103861}
+.route-option.route-one-option.active{background:#1167b3}
+.route-option.route-three-option.active{background:#a46722}
+.campus-map{background:white;border:1px solid #ccdced;border-radius:14px;box-shadow:0 10px 28px #153a6513}
+.road-guide-item{background:#e9f2ff;border-color:#c7dbee;padding:13px}
+.road-guide-item:nth-child(2){background:#fff3df;border-color:#edd7ac}
+.road-guide-item strong{font-size:11px}
+.road-guide-item small{font-size:13px}
+.route-description{background:#eaf3fc;border-color:#c9ddf1;color:#24476c;font-size:13px;padding:13px}
+.gate-warning{background:#fff7e9;border-color:#e7cb94;color:#755328}
+.gate-warning strong{color:#774b20}
+.travel-info{background:#fff;border:1px solid #dce6f2;box-shadow:0 6px 22px #173a610c}
+.travel-heading{color:#173a65;border-bottom-color:#d9e5f2}
+.travel-heading-icon{background:#c7a05d}
+.travel-dot{border-color:#d4a75f}
+.travel-row{font-size:14px;color:#3b536f}
+.travel-row strong{color:#14345d}
+.travel-advice{color:#9b7134;border-color:#e3d3b3}
+.action-button{background:#0c2e57;border-color:#0c2e57;font-size:13px;border-radius:10px}
+.action-button:hover{background:#174e82}
+.action-button span{color:#f1c579}
+.primary-action{background:linear-gradient(105deg,#0f6bb1,#0b4e92);border-color:#1264a9}
+.primary-action:hover{background:#08447d}
+.primary-action span{color:#fff}
+.barcode{opacity:.88}
+.barcode-caption{color:#58718b}
+.ticket-bottom{color:#57718c}
+.ticket-bottom span:last-child{color:#a47b3d}
+.link-builder{background:#fff;border:1px solid #dae7f3}
+.builder-controls button{background:#0d609f}
+.toast{background:#0c2e57}
+
+@media(max-width:1150px){
+  .ticket-header{padding:16px 25px}.ticket-meta-bar{padding:12px 25px}
+  .ticket-left,.ticket-right{padding:29px 25px}
+  .brand-name{font-size:17px}.brand-school{font-size:13px}
+  .portrait-frame{width:116px;height:116px}
+  .passenger-copy h1{font-size:33px}
+  .route-stop strong{font-size:42px}
+  .route-destination strong{font-size:39px}
+  .detail strong{font-size:14px}
+}
+@media(max-width:850px){
+  .ticket-grid{grid-template-columns:1fr}
+  .ticket-left{border-right:0;border-bottom:2px dashed #b8cce2}
+  .ticket-meta-bar{font-size:11px;gap:10px}
+  .meta-center{display:none}
+  .portrait-frame{width:129px;height:129px}
+  .passenger-copy h1{font-size:38px}
+  .route-stop strong{font-size:48px}
+  .route-destination strong{font-size:46px}
+  .detail strong{font-size:16px}
+}
+@media(max-width:500px){
+  .app-shell{padding:13px 9px 20px}
+  .boarding-pass{border-radius:17px}
+  .ticket-header{min-height:74px;padding:13px 15px}
+  .brand-mark{width:38px;height:38px;border-radius:8px}
+  .brand-mark img{width:81px;left:-22px;top:-7px}
+  .brand-name{font-size:12px}.brand-school{display:none}
+  .header-class{font-size:10px}
+  .ticket-meta-bar{padding:10px 16px;font-size:10px;letter-spacing:0}
+  .meta-date span{margin:0 3px}
+  .ticket-left,.ticket-right{padding:24px 17px}
+  .portrait-frame{width:99px;height:99px;box-shadow:0 0 0 2px #b88b3e,0 0 0 4px #e6d9bc88}
+  .passenger-area{gap:14px}
+  .passenger-copy h1{font-size:clamp(23px,6.2vw,30px)}
+  .university{font-size:11px}
+  .achievement-pill{font-size:9px;padding:7px 8px}
+  .flight-route{padding:16px 12px;gap:7px;margin:23px 0 19px}
+  .route-stop strong{font-size:36px}
+  .route-destination strong{font-size:35px}
+  .route-stop span,.route-destination span{font-size:10px}
+  .flight-path{min-width:18px}
+  .details-grid{padding:18px 9px;gap:18px 8px}
+  .detail{padding-left:7px}
+  .detail-label{font-size:10px}
+  .detail strong{font-size:12px}
+  .message-card p{font-size:13px}
+  .countdown-title{font-size:11px}
+  .timer-numbers span{font-size:25px}
+  .timer-numbers small{font-size:10px}
+  .guest-strip strong{font-size:13px}
+  .map-title-row h2{font-size:20px}
+  .route-option{font-size:10px;min-height:40px}
+  .road-guide{grid-template-columns:1fr}
+  .gate-warning p,.route-description{font-size:12px}
+  .action-button{font-size:11px}
+}
+
+/* Chỉnh thông tin theo lịch chính thức · 21/11/2026 */
+.portrait-frame{display:grid;place-items:center;isolation:isolate}
+.portrait-frame img{
+  position:absolute;top:50%;left:50%;width:110%;height:110%;max-width:none;
+  transform:translate(-50%,-50%);object-fit:cover;object-position:center center;
+}
+.passenger-copy h1{margin-bottom:7px}
+.contact-link{
+  display:inline-flex;align-items:center;gap:9px;margin:3px 0 13px;
+  padding:8px 12px;border-radius:100px;border:1px solid #d8e4f0;
+  background:#eaf3fe;color:#114e85;font-size:14px;font-weight:800;
+  transition:background .2s,border-color .2s;
+}
+.contact-link:hover{background:#d9ebfc;border-color:#b9d1ea}
+.contact-link svg{width:17px;height:17px;flex-shrink:0}
+.passenger-copy .university{margin-bottom:10px}
+.achievement-pill{gap:5px}
+.detail-schedule{border-left-color:#c5a058}
+.detail-schedule .detail-label{font-size:11px}
+.detail-ceremony strong{color:#0d67ad}
+.location-icon{display:inline-flex;align-items:center;justify-content:center;width:27px;height:27px;flex-shrink:0}
+.location-icon svg{width:23px;height:23px}
+.map-title-icon svg{width:22px;height:22px}
+.photo-meeting{
+  background:#eff6fe;border:1px solid #d3e4f5;border-radius:12px;
+  padding:14px 17px;margin:0 0 19px;color:#24476a;
+}
+.photo-meeting-title{display:flex;align-items:center;gap:9px;font-weight:800;font-size:12px;letter-spacing:.04em;color:#0e5087}
+.photo-meeting-title svg{width:19px;height:19px;flex-shrink:0}
+.photo-meeting p{font-size:13px;line-height:1.6;margin:8px 0 0 28px}
+.photo-meeting a{font-weight:800;color:#095b9c;text-decoration:underline;text-underline-offset:2px}
+.closing-signoff{font-style:italic}
+.closing-signoff strong{font-weight:800}
+.meeting-photo-note{margin-top:12px!important;color:#e5cf9d!important;font-size:13px!important}
+.travel-advice{font-size:13px}
+.guest-strip{justify-content:flex-start}
+@media(max-width:500px){
+  .contact-link{font-size:12px;padding:6px 9px;gap:6px;margin-bottom:10px}
+  .contact-link svg{width:15px;height:15px}
+  .details-grid{grid-template-columns:repeat(3,minmax(0,1fr))}
+  .detail-schedule{
+    grid-column:1/-1;display:flex;align-items:center;justify-content:space-between;
+    gap:12px;border-left:0;border-top:1px solid #e3e9f0;padding:13px 6px 0;
+  }
+  .detail-schedule .detail-label{font-size:10px;margin:0}
+  .detail-schedule strong{font-size:13px;text-align:right;white-space:nowrap}
+  .photo-meeting{padding:12px 13px}
+  .photo-meeting p{font-size:12px;margin-left:0}
+}

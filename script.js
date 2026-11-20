@@ -6,12 +6,11 @@
 
 const CONFIG = {
   graduate: 'Nguyễn Ngọc Hải',
-  eventDate: '2026-11-27T13:00:00+07:00', // 13:00, giờ Việt Nam
+  eventDate: '2026-11-27T15:00:00+07:00', // 15:00, giờ Việt Nam
   eventTitle: 'Lễ tốt nghiệp — Nguyễn Ngọc Hải',
   venue: 'Hội trường A5, Trường Đại học Bách khoa, 268 Lý Thường Kiệt, TP. Hồ Chí Minh',
-  // Khoảng thời gian mặc định 1 giờ chỉ để tạo một ô nhắc lịch.
-  // Khi biết giờ kết thúc, hãy sửa calendarReminderMinutes.
-  calendarReminderMinutes: 60,
+  // Giờ làm lễ 15:00–16:30, dùng đúng thời lượng 90 phút trong lịch .ics.
+  eventDurationMinutes: 90,
 };
 
 const qs = new URLSearchParams(window.location.search);
@@ -30,7 +29,7 @@ const departureAt = new Date(CONFIG.eventDate).getTime();
 function renderCountdown() {
   const remaining = Math.max(0, departureAt - Date.now());
   if (remaining <= 0) {
-    document.querySelector('.countdown-title').textContent = '✦ KHOẢNH KHẮC TỐT NGHIỆP ĐÃ ĐẾN';
+    document.querySelector('.countdown-title').textContent = 'KHOẢNH KHẮC TỐT NGHIỆP ĐÃ ĐẾN';
     countdownElement.innerHTML = '<span>🎓</span><small>Chúc mừng tốt nghiệp!</small>';
     return true;
   }
@@ -164,7 +163,7 @@ function downloadCalendarEvent() {
   const utcStamp = (date) =>
     `${date.getUTCFullYear()}${pad(date.getUTCMonth() + 1)}${pad(date.getUTCDate())}T${pad(date.getUTCHours())}${pad(date.getUTCMinutes())}${pad(date.getUTCSeconds())}Z`;
   const start = new Date(CONFIG.eventDate);
-  const end = new Date(start.getTime() + CONFIG.calendarReminderMinutes * 60000);
+  const end = new Date(start.getTime() + CONFIG.eventDurationMinutes * 60000);
   const escapeICS = (value) => value.replace(/\\/g, '\\\\').replace(/;/g, '\\;').replace(/,/g, '\\,').replace(/\n/g, '\\n');
   const lines = [
     'BEGIN:VCALENDAR',
