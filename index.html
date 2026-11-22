@@ -112,7 +112,7 @@
 
           <div class="ticket-right">
             <div class="map-title-row"><div><span class="section-kicker small-kicker"></span><h2>VỊ TRÍ HẸN NHAU ĐỄ CHỤP ẢNH</h2></div><span class="map-title-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 10c0 5-8 12-8 12S4 15 4 10a8 8 0 0 1 16 0Z"/><circle cx="12" cy="10" r="2.5"/></svg></span></div>
-            <div class="map-tabs" role="tablist" aria-label="Chọn thông tin chỉ đường"><button id="tab-map" class="map-tab active" type="button" role="tab" aria-selected="true" aria-controls="map-panel">Sơ đồ trường</button><button id="tab-meeting" class="map-tab" type="button" role="tab" aria-selected="false" aria-controls="meeting-panel">Điểm hẹn</button></div>
+            <div class="map-tabs" role="tablist" aria-label="Chọn thông tin chỉ đường"><button id="tab-map" class="map-tab active" type="button" role="tab" aria-selected="true" aria-controls="map-panel">Sơ đồ trường</button><button id="tab-meeting" class="map-tab" type="button" role="tab" aria-selected="false" aria-controls="meeting-panel"></button></div>
 
             <div id="map-panel" class="tab-panel" role="tabpanel" aria-labelledby="tab-map">
               <div class="route-selector" role="group" aria-label="Chọn tuyến đường tới điểm hẹn">
@@ -177,13 +177,13 @@
                   </g>
                   <g class="parking-map-label" aria-label="Bãi xe 1 gần cổng 1">
                     <circle cx="555" cy="353" r="31" fill="#0c548b" stroke="#fff" stroke-width="6" />
-                    <text x="555" y="368" text-anchor="middle" fill="#fff" font-size="43" font-weight="900">P1</text>
+                    <text x="555" y="368" text-anchor="middle" fill="#fff" font-size="43" font-weight="900">P</text>
                     <rect x="478" y="389" width="154" height="35" rx="10" fill="#0c365e" stroke="#fff" stroke-width="3" />
                     <text x="555" y="414" text-anchor="middle" fill="#fff" font-size="21" font-weight="800">BÃI XE 1</text>
                   </g>
                   <g class="parking-map-label" aria-label="Bãi xe 2 sau tòa B10">
                     <circle cx="1494" cy="348" r="31" fill="#0c548b" stroke="#fff" stroke-width="6" />
-                    <text x="1494" y="363" text-anchor="middle" fill="#fff" font-size="43" font-weight="900">P2</text>
+                    <text x="1494" y="363" text-anchor="middle" fill="#fff" font-size="43" font-weight="900">P</text>
                     <rect x="1378" y="386" width="232" height="65" rx="11" fill="#0c365e" stroke="#fff" stroke-width="3" />
                     <text x="1494" y="410" text-anchor="middle" fill="#fff" font-size="22" font-weight="800">BÃI XE 2</text>
                     <text x="1494" y="437" text-anchor="middle" fill="#c4f5d6" font-size="20" font-weight="800">(SAU TÒA B10)</text>
@@ -193,10 +193,10 @@
                   <div id="meeting-pin" class="meeting-pin" role="img" aria-label="" hidden>
                     <span class="pin-pulse" aria-hidden="true"></span>
                     <span class="pin-icon" aria-hidden="true"><svg viewBox="0 0 40 52" xmlns="http://www.w3.org/2000/svg"><path d="M20 2C10 2 3 9 3 19c0 13 17 31 17 31s17-18 17-31C37 9 30 2 20 2Z" fill="#d5a444" stroke="#fff" stroke-width="3"/><circle cx="20" cy="19" r="7" fill="#fff"/></svg></span>
-                    <span id="pin-label" class="pin-label"></span>
+                    <span id="pin-label" class="pin-label">ĐIỂM HẸN</span>
                   </div>
                 </div>
-                <div class="map-badge"><span class="badge-live"></span> </div>
+                <div class="map-badge"><span class="badge-live"></span> ĐIỂM HẸN</div>
                 <button id="map-zoom-button" class="map-zoom-button" type="button" aria-label="Phóng to bản đồ">⤢ <span>Phóng to</span></button>
                 <button id="map-close-button" class="map-close-button" type="button" aria-label="Đóng bản đồ phóng to" hidden>✕</button>
               </div>
