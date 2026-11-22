@@ -14,10 +14,6 @@ const CONFIG = {
 };
 
 const qs = new URLSearchParams(window.location.search);
-const INVITE_API_BASE = String(window.GRAD_INVITE_API_BASE || '').replace(/\/+$/, '');
-const LEGACY_API_BASE = String(window.GRAD_LEGACY_API_BASE || '').replace(/\/+$/, '');
-const rawServerCode = String(qs.get('k') || '').toUpperCase();
-const serverCode = /^[A-Z0-9]{1,14}$/.test(rawServerCode) ? rawServerCode : '';
 const SALUTATIONS = { ban: 'Bạn', anh: 'Anh', chi: 'Chị', em: 'Em', co: 'Cô', chu: 'Chú', 'gia-dinh': 'Gia đình', thay: 'Thầy' };
 const SHORT_SALUTATIONS = { b: 'ban', a: 'anh', c: 'chi', e: 'em', o: 'co', u: 'chu', g: 'gia-dinh', t: 'thay' };
 function decodeCompactName(data) {
@@ -61,7 +57,21 @@ const INVITE_PRESETS = {
     closingTemplate: 'Hẹn gặp {doi_tuong} ở Bách Khoa, cùng chụp thật nhiều ảnh nhé! 🎓📸',
   },
 };
-let invitePresentation = { invitationStyle: 'kinh-moi', ...INVITE_PRESETS.default };
+// Lời mời được truyền qua URL, không cần tài khoản, API hay mã quản trị.
+const validInviteStyle = Object.hasOwn(INVITE_STYLES, qs.get('st')) ? qs.get('st') : 'kinh-moi';
+const initialPreset = Object.hasOwn(INVITE_PRESETS, qs.get('pr')) ? qs.get('pr') : 'default';
+let invitePresentation = { invitationStyle: validInviteStyle, ...INVITE_PRESETS[initialPreset] };
+// txt chỉ dùng khi Hải tự sửa câu chữ. Mã hóa UTF-8 thành base64url.
+try {
+  const override = JSON.parse(decodeCompactName(qs.get('txt')) || 'null');
+  if (Array.isArray(override) && override.length === 3) {
+    ['messageTemplate', 'quoteTemplate', 'closingTemplate'].forEach((field, index) => {
+      if (typeof override[index] === 'string' && override[index].trim() && override[index].length <= 650) {
+        invitePresentation[field] = override[index].trim();
+      }
+    });
+  }
+} catch { /* Link thiếu dữ liệu tùy chỉnh: dùng lời nhắn mặc định. */ }
 let guestName = requestedGuest || 'Quý khách';
 let guestAddress = guestName;
 
@@ -91,7 +101,7 @@ function renderGuest() {
   guestName = requestedGuest || 'Quý khách';
   guestAddress = requestedGuest ? `${SALUTATIONS[salutationCode]} ${guestName}` : guestName;
   const nameElement = document.getElementById('guest-name');
-  nameElement.textContent = serverCode && !requestedGuest ? 'ĐANG TẢI THIỆP MỜI…' : guestAddress.toLocaleUpperCase('vi-VN');
+  nameElement.textContent = guestAddress.toLocaleUpperCase('vi-VN');
   document.getElementById('invite-style-label').textContent = INVITE_STYLES[invitePresentation.invitationStyle] || INVITE_STYLES['kinh-moi'];
   renderMessage(document.getElementById('invite-message'), renderTemplate(invitePresentation.messageTemplate));
   document.getElementById('invite-quote').textContent = `“${renderTemplate(invitePresentation.quoteTemplate)}”`;
@@ -100,8 +110,7 @@ function renderGuest() {
 }
 renderGuest();
 
-// Tên riêng của khách mời có thể tạo qua ?guest=...
-// ?k=LMT sẽ truy vấn tên/xưng hô/PIN đã lưu trên máy chủ.
+// Tên riêng và xưng hô được lấy từ ?guest=...&x=...; không cần máy chủ.
 
 const countdownElement = document.getElementById('countdown');
 const departureAt = new Date(CONFIG.eventDate).getTime();
@@ -301,39 +310,6 @@ function renderMeetingPin() {
 }
 renderMeetingPin();
 
-async function resolveServerInvite() {
-  if (!serverCode) return;
-  try {
-    let response = await fetch(`${INVITE_API_BASE}/api/invites/${encodeURIComponent(serverCode)}`, { cache: 'no-store' });
-    if (response.status === 404 && LEGACY_API_BASE && LEGACY_API_BASE !== INVITE_API_BASE) {
-      response = await fetch(`${LEGACY_API_BASE}/api/invites/${encodeURIComponent(serverCode)}`, { cache: 'no-store' });
-    }
-    if (!response.ok) throw new Error(`Máy chủ trả về ${response.status}`);
-    const raw = await response.json();
-    const invite = raw.invite || raw;
-    if (typeof invite.name !== 'string' || !Object.hasOwn(SALUTATIONS, invite.salutation)) throw new Error('Dữ liệu thiệp không hợp lệ.');
-    requestedGuest = invite.name.trim().slice(0, 70);
-    salutationCode = invite.salutation;
-    const textFields = ['messageTemplate', 'quoteTemplate', 'closingTemplate'];
-    if (Object.hasOwn(INVITE_STYLES, invite.invitationStyle)) invitePresentation.invitationStyle = invite.invitationStyle;
-    textFields.forEach((field) => {
-      if (typeof invite[field] === 'string' && invite[field].trim()) invitePresentation[field] = invite[field].trim();
-    });
-    renderGuest();
-    if (!qs.has('p') && !qs.has('pin') && 'pin' in invite) {
-      const pin = invite.pin;
-      meetingPin = pin && Number.isFinite(pin.x) && Number.isFinite(pin.y) && pin.x >= 0 && pin.x <= 100 && pin.y >= 0 && pin.y <= 100
-        ? { x: pin.x, y: pin.y, label: normalizeMeetingLabel(pin.label) } : null;
-      renderMeetingPin();
-    }
-  } catch (error) {
-    document.getElementById('guest-name').textContent = 'KHÔNG TẢI ĐƯỢC THIỆP MỜI';
-    showToast(`Không tra cứu được ${serverCode}. Hãy kiểm tra API hoặc mã khách mời.`);
-    console.warn('Invite lookup failed:', error.message);
-  }
-}
-void resolveServerInvite();
-
 function addCompactPin(url) {
   if (!meetingPin) {
     url.searchParams.set('p', 'off');
@@ -353,43 +329,45 @@ function syncPinURL() {
   window.history.replaceState(null, '', url);
 }
 
-function nameInitials(fullName) {
-  // LÊ Minh Thương -> LMT; NguyenNgocHai -> NNH; Nguyễn Ngọc Hải -> NNH.
-  const spaced = String(fullName).replace(/([\p{Ll}\d])(?=\p{Lu})/gu, '$1 ');
-  return spaced.trim().split(/[\s._-]+/u).filter((part) => /[\p{L}]/u.test(part)).map((part) => part[0])
-    .join('').normalize('NFD').replace(/[\u0300-\u036f]/g, '').replace(/đ/gi, 'D')
-    .replace(/[^A-Za-z0-9]/g, '').toUpperCase().slice(0, 8) || 'KM';
+function getPresetName(fields) {
+  return Object.entries(INVITE_PRESETS).find(([, preset]) =>
+    ['messageTemplate', 'quoteTemplate', 'closingTemplate'].every((field) =>
+      String(fields[field] || '').trim() === preset[field]))?.[0] || null;
 }
 
-function createServerCodeURL(code) {
+function createShareableURL(name, salutation = salutationCode, style = invitePresentation.invitationStyle, fields = invitePresentation) {
   const url = new URL(window.location.href);
   url.search = '';
-  url.searchParams.set('k', code);
-  return url;
-}
-
-function createShareableURL(name, salutation = salutationCode, code = null) {
-  const url = new URL(window.location.href);
-  url.search = '';
-  if (serverCode && name === requestedGuest && salutation === salutationCode && (code === null || code === serverCode)) {
-    url.searchParams.set('k', serverCode);
-    return url;
-  }
-  if (name) {
-    const inviteCode = code || shortInvite?.code || qs.get('i') || nameInitials(name);
-    const shortSalutation = Object.keys(SHORT_SALUTATIONS).find((key) => SHORT_SALUTATIONS[key] === salutation) || 'b';
-    url.searchParams.set('m', `${inviteCode}.${shortSalutation}.${encodeCompactName(name)}`);
+  if (name) url.searchParams.set('guest', name);
+  if (salutation !== 'ban' && Object.hasOwn(SALUTATIONS, salutation)) url.searchParams.set('x', salutation);
+  if (style !== 'kinh-moi' && Object.hasOwn(INVITE_STYLES, style)) url.searchParams.set('st', style);
+  const preset = getPresetName(fields);
+  if (preset && preset !== 'default') url.searchParams.set('pr', preset);
+  if (!preset) {
+    const texts = ['messageTemplate', 'quoteTemplate', 'closingTemplate'].map((field) =>
+      String(fields[field] || INVITE_PRESETS.default[field]).trim());
+    url.searchParams.set('txt', encodeCompactName(JSON.stringify(texts)));
   }
   addCompactPin(url);
   return url;
 }
 
-// Các link cũ vẫn đọc được, nhưng thanh địa chỉ tự chuyển sang định dạng ngắn.
-if (['guest', 'i', 'g', 'x', 'pin', 'spot'].some((key) => qs.has(key))) {
-  const compactURL = createShareableURL(requestedGuest, salutationCode, qs.get('i'));
-  if (qs.get('builder') === '1') compactURL.searchParams.set('builder', '1');
-  try { window.history.replaceState(null, '', compactURL); } catch { /* mở file trên máy */ }
+function getBuilderValues() {
+  const form = document.getElementById('guest-form');
+  if (!form) return null;
+  return {
+    name: document.getElementById('guest-input').value.trim(),
+    salutation: document.getElementById('guest-salutation').value,
+    style: document.getElementById('invite-style').value,
+    texts: {
+      messageTemplate: document.getElementById('invite-message-input').value.trim(),
+      quoteTemplate: document.getElementById('invite-quote-input').value.trim(),
+      closingTemplate: document.getElementById('invite-closing-input').value.trim(),
+    },
+  };
 }
+
+// Các link phiên bản cũ (?m=..., ?g=...) vẫn đọc được; link mới chỉ dùng ?guest=.
 
 if (qs.get('builder') === '1') {
   pinEditor.hidden = false;
@@ -428,7 +406,10 @@ if (qs.get('builder') === '1') {
     meetingPin.label = normalizeMeetingLabel(pinNameInput.value);
     renderMeetingPin();
     syncPinURL();
-    const url = createShareableURL(requestedGuest).href;
+    const values = getBuilderValues();
+    const url = values && values.name
+      ? createShareableURL(values.name, values.salutation, values.style, values.texts).href
+      : createShareableURL(requestedGuest).href;
     const copied = await copyText(url);
     pinShareOutput.textContent = url;
     showToast(copied ? 'Đã lưu PIN và sao chép link!' : 'Đã lưu PIN. Sao chép link ngay bên dưới.');
@@ -616,7 +597,7 @@ document.getElementById('share-button').addEventListener('click', async () => {
   showToast(copied ? 'Đã sao chép đường dẫn thiệp mời!' : 'Không sao chép tự động được. Hãy sao chép URL trên thanh địa chỉ.');
 });
 
-// Chế độ tạo thiệp cá nhân: xem trước và lưu trên API được bảo vệ bằng mã quản trị.
+// Công cụ tạo link cá nhân — chạy hoàn toàn tĩnh trên GitHub Pages.
 if (qs.get('builder') === '1') {
   const builder = document.getElementById('link-builder');
   builder.hidden = false;
@@ -625,10 +606,6 @@ if (qs.get('builder') === '1') {
   const salutationSelect = document.getElementById('guest-salutation');
   const styleSelect = document.getElementById('invite-style');
   const presetSelect = document.getElementById('invite-preset');
-  const adminInput = document.getElementById('invite-admin-key');
-  const rememberAdmin = document.getElementById('remember-admin');
-  const status = document.getElementById('api-status');
-  const codePreview = document.getElementById('guest-short-code');
   const output = document.getElementById('builder-output');
   const templateInputs = {
     messageTemplate: document.getElementById('invite-message-input'),
@@ -639,17 +616,13 @@ if (qs.get('builder') === '1') {
   salutationSelect.value = salutationCode;
   styleSelect.value = invitePresentation.invitationStyle;
   Object.entries(templateInputs).forEach(([field, element]) => { element.value = invitePresentation[field]; });
-
-  try {
-    const saved = localStorage.getItem('hai-invite-admin-key-v10');
-    if (saved) { rememberAdmin.checked = true; adminInput.value = saved; }
-  } catch { /* Trình duyệt riêng tư: không lưu mã. */ }
+  presetSelect.value = getPresetName(invitePresentation) || 'custom';
 
   function renderBuilderPreview() {
     const name = input.value.trim() || '…';
     const salutation = salutationSelect.value;
-    codePreview.textContent = input.value.trim() ? nameInitials(input.value) : '—';
-    document.getElementById('preview-greeting').textContent = `${INVITE_STYLES[styleSelect.value]} ${SALUTATIONS[salutation].toLocaleUpperCase('vi-VN')} ${name.toLocaleUpperCase('vi-VN')}`;
+    document.getElementById('preview-greeting').textContent =
+      `${INVITE_STYLES[styleSelect.value]} ${SALUTATIONS[salutation].toLocaleUpperCase('vi-VN')} ${name.toLocaleUpperCase('vi-VN')}`;
     document.getElementById('preview-message').textContent = renderTemplate(templateInputs.messageTemplate.value, name, salutation);
     document.getElementById('preview-quote').textContent = `“${renderTemplate(templateInputs.quoteTemplate.value, name, salutation)}”`;
     document.getElementById('preview-closing').textContent = renderTemplate(templateInputs.closingTemplate.value, name, salutation);
@@ -667,88 +640,20 @@ if (qs.get('builder') === '1') {
   });
   renderBuilderPreview();
 
-  document.getElementById('toggle-admin-visible').addEventListener('click', (event) => {
-    const visible = adminInput.type === 'text';
-    adminInput.type = visible ? 'password' : 'text';
-    event.currentTarget.textContent = visible ? 'Hiện' : 'Ẩn';
-  });
-  rememberAdmin.addEventListener('change', () => {
-    if (!rememberAdmin.checked) {
-      try { localStorage.removeItem('hai-invite-admin-key-v10'); localStorage.removeItem('hai-invite-admin-key-v1'); } catch { /* ignore */ }
-    }
-  });
-  // Kiểm tra kết nối và hiện lỗi chính xác thay vì chỉ báo chung "Không lưu được mã".
-  async function checkApiHealth() {
-    if (window.location.protocol === 'file:' && !INVITE_API_BASE) {
-      status.textContent = 'Cần chạy start_windows.bat hoặc node server/server.mjs để lưu mã. Mở file HTML trực tiếp chỉ xem được thiệp.';
-      return;
-    }
-    try {
-      const response = await fetch(`${INVITE_API_BASE}/api/health`, { cache: 'no-store' });
-      if (!response.ok) throw new Error(`HTTP ${response.status}`);
-      const data = await response.json();
-      if (!data.ok) throw new Error('API không hợp lệ');
-      status.textContent = '● Dịch vụ lưu mã đã kết nối. Mã quản trị được kiểm tra ở máy chủ, không xuất hiện trong link.';
-      status.classList.add('api-ok');
-    } catch {
-      status.textContent = 'Chưa kết nối API mới. Nếu đang ở GitHub Pages, hãy cấu hình URL API trong site-config.js; không dùng link ngắn nếu chưa deploy API.';
-      status.classList.add('api-error');
-    }
-  }
-  void checkApiHealth();
-
   form.addEventListener('submit', async (event) => {
     event.preventDefault();
-    const name = input.value.trim();
-    const adminKey = adminInput.value.trim();
-    if (!name || adminKey.length < 16) return showToast('Nhập tên và mã quản trị hợp lệ.');
-    const salutation = salutationSelect.value;
-    const button = document.getElementById('create-invite-button');
-    button.disabled = true;
-    button.textContent = 'ĐANG LƯU MÃ…';
-    output.textContent = '';
-    try {
-      const payload = {
-        name, salutation, invitationStyle: styleSelect.value,
-        messageTemplate: templateInputs.messageTemplate.value.trim(),
-        quoteTemplate: templateInputs.quoteTemplate.value.trim(),
-        closingTemplate: templateInputs.closingTemplate.value.trim(),
-        pin: meetingPin,
-      };
-      const response = await fetch(`${INVITE_API_BASE}/api/invites`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json', 'X-Invite-Admin-Key': adminKey },
-        body: JSON.stringify(payload),
-      });
-      let data = {};
-      try { data = await response.json(); } catch { /* Có thể là trang lỗi HTML. */ }
-      if (!response.ok || !data.code) {
-        const reason = response.status === 401 ? 'Mã quản trị không đúng với mã của server đang chạy.'
-          : response.status === 403 ? 'API chặn nguồn truy cập. Kiểm tra ALLOWED_ORIGINS trên server.'
-          : data.error || `API phản hồi lỗi ${response.status}.`;
-        throw new Error(reason);
-      }
-      // API V10 cũ chỉ lưu tên/xưng hô. Không thông báo thành công giả nếu mất phần lời mời tùy chỉnh.
-      const saved = data.invite || data.record;
-      if (!saved || saved.messageTemplate !== payload.messageTemplate || saved.closingTemplate !== payload.closingTemplate || saved.invitationStyle !== payload.invitationStyle) {
-        throw new Error(`API chưa hỗ trợ lưu nội dung tùy chỉnh. Mã ${data.code} đã có thể được tạo, nhưng hãy dùng server đi kèm bản ZIP mới.`);
-      }
-      if (rememberAdmin.checked) {
-        try { localStorage.setItem('hai-invite-admin-key-v10', adminKey); } catch { /* ignore */ }
-      } else {
-        try { localStorage.removeItem('hai-invite-admin-key-v10'); } catch { /* ignore */ }
-      }
-      const url = createServerCodeURL(data.code);
-      const copied = await copyText(url.href);
-      codePreview.textContent = data.code;
-      output.textContent = url.href;
-      showToast(copied ? 'Đã lưu toàn bộ lời mời và sao chép link!' : 'Đã lưu. Sao chép link bên dưới nhé!');
-    } catch (error) {
-      output.textContent = error.message || 'Không thể kết nối dịch vụ lưu mã. Kiểm tra server.';
-      showToast('Lỗi lưu mã: xem nội dung ngay bên dưới nút tạo link.');
-    } finally {
-      button.disabled = false;
-      button.textContent = 'Tạo & sao chép link cá nhân';
-    }
+    const values = getBuilderValues();
+    if (!values.name) return showToast('Vui lòng nhập tên khách mời.');
+    const url = createShareableURL(values.name, values.salutation, values.style, values.texts);
+    const copied = await copyText(url.href);
+    output.replaceChildren();
+    const link = document.createElement('a');
+    link.href = url.href;
+    link.textContent = url.href;
+    link.target = '_blank';
+    link.rel = 'noopener noreferrer';
+    link.style.overflowWrap = 'anywhere';
+    output.append(link);
+    showToast(copied ? 'Đã sao chép link thiệp mời!' : 'Đã tạo link. Chạm vào đường dẫn dưới đây để xem thiệp.');
   });
 }

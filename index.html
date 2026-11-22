@@ -10,7 +10,6 @@
     <title>Thiệp mời lễ tốt nghiệp — Nguyễn Ngọc Hải</title>
     <link rel="icon" href="assets/favicon.svg" type="image/svg+xml" />
     <link rel="stylesheet" href="style.css" />
-    <script src="site-config.js"></script>
     <script src="script.js" defer></script>
   </head>
   <body class="intro-active">
@@ -241,8 +240,8 @@
       <section id="link-builder" class="link-builder" aria-labelledby="builder-title" hidden>
         <div class="builder-copy">
           <span class="section-kicker">CÔNG CỤ TẠO THIỆP CỦA HẢI</span>
-          <h2 id="builder-title">Tạo thiệp mời có mã ngắn</h2>
-          <p>Chọn cách mời và xưng hô, nhập tên người nhận, chỉnh lời nhắn nếu muốn. Bản xem trước thay đổi ngay trước khi lưu.</p>
+          <h2 id="builder-title">Tạo thiệp mời cá nhân hóa</h2>
+          <p>Chọn cách mời và xưng hô, nhập tên người nhận, chỉnh lời nhắn nếu muốn. Sao chép liên kết để gửi trực tiếp cho khách — không cần mã quản trị hoặc máy chủ.</p>
           <div class="builder-preview" aria-live="polite">
             <span class="preview-kicker">BẢN XEM TRƯỚC</span>
             <h3 id="preview-greeting">KÍNH MỜI BẠN …</h3>
@@ -250,7 +249,7 @@
             <p class="preview-quote" id="preview-quote"></p>
             <p class="preview-closing" id="preview-closing"></p>
           </div>
-          <p class="builder-instructions">Mã dạng <code>?k=LMT</code> chỉ hiển thị đầy đủ trên các thiết bị khi máy chủ lưu mã đã được cấu hình. Không đặt mã quản trị trong mã JavaScript công khai.</p>
+          <p class="builder-instructions">Link thông thường có dạng <code>?guest=My+Na&amp;x=chi</code>. Nếu chỉnh lời nhắn riêng, website sẽ tự đính kèm nội dung vào link để người nhận xem được trên mọi thiết bị.</p>
         </div>
         <form id="guest-form">
           <div class="builder-fields builder-fields-three">
@@ -266,14 +265,7 @@
           <div class="builder-textarea-group"><label for="invite-quote-input">Lời trích dẫn cuối thiệp</label><textarea id="invite-quote-input" maxlength="450" rows="3"></textarea></div>
           <div class="builder-textarea-group"><label for="invite-closing-input">Câu kết cuối thiệp</label><textarea id="invite-closing-input" maxlength="350" rows="2"></textarea></div>
           <small class="builder-helper">Dùng <code>{doi_tuong}</code> để tự đổi thành bạn/anh/chị/em/gia đình; <code>{ten}</code> là tên đầy đủ, <code>{xung_ho}</code> là cách xưng hô.</small>
-          <div class="builder-admin">
-            <label for="invite-admin-key">Mã quản trị lưu thiệp</label>
-            <div class="admin-input-wrap"><input id="invite-admin-key" type="password" minlength="16" autocomplete="new-password" placeholder="Nhập mã quản trị của server" required /><button type="button" id="toggle-admin-visible" aria-label="Hiện mã quản trị">Hiện</button></div>
-            <small id="api-status">Đang kiểm tra dịch vụ lưu mã…</small>
-            <label class="remember-admin"><input id="remember-admin" type="checkbox" /> Ghi nhớ mã trên thiết bị này (không khuyến khích nếu dùng máy chung)</label>
-          </div>
           <div class="builder-controls"><button type="submit" id="create-invite-button">Tạo &amp; sao chép link cá nhân</button></div>
-          <div class="builder-code">Mã khách mời: <strong id="guest-short-code">—</strong><span> Trùng mã sẽ tự thêm 2, 3…</span></div>
           <output id="builder-output" aria-live="polite"></output>
         </form>
       </section>
