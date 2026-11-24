@@ -263,10 +263,10 @@ const pinEditor = document.getElementById('pin-editor');
 const pinPickButton = document.getElementById('pin-pick-button');
 const pinShareOutput = document.getElementById('pin-share-output');
 
-const DEFAULT_PIN = { x: 39.4, y: 58.8, label: ' };
+const DEFAULT_PIN = { x: 39.4, y: 58.8, label: 'Điểm hẹn' };
 function normalizeMeetingLabel(label) {
   const name = String(label || '').trim().slice(0, 70);
-  return !name || name.toLocaleLowerCase('vi-VN') === 'điểm hẹn chụp ảnh' ? '' : name;
+  return !name || name.toLocaleLowerCase('vi-VN') === 'điểm hẹn chụp ảnh' ? 'Điểm hẹn' : name;
 }
 function readPinFromURL() {
   const short = qs.get('p');
