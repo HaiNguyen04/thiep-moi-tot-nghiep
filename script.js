@@ -42,7 +42,7 @@ const INVITE_STYLES = { 'kinh-moi': 'KÍNH MỜI', 'than-moi': 'THÂN MỜI', 't
 const DEFAULT_QUOTE = 'Điều đáng quý nhất của hành trình không chỉ là đích đến, mà còn là những người đã đồng hành cùng mình.';
 const INVITE_PRESETS = {
   default: {
-    messageTemplate: 'Hành trình đại học sẽ trọn vẹn hơn khi có {doi_tuong} ở đó. Hải rất mong được gặp {doi_tuong} trong ngày đặc biệt này!',
+    messageTemplate: 'Hải sẽ làm lễ vào lúc 15:00-17:00, nên {doi_tuong} có thể đến vào khung giờ trước lễ hoặc sau lễ để cùng chụp ảnh lưu niệm nha. Hải rất mong được gặp {doi_tuong} trong ngày đặc biệt này!',
     quoteTemplate: DEFAULT_QUOTE,
     closingTemplate: 'Hẹn gặp {doi_tuong} tại lễ tốt nghiệp của Hải. 🎓📸',
   },
